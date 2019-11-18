@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Saffron</string>
+    <string name="orderNoHint"><font size="20">ORDER NO</font></string>
+    <string name="spaceBetweenDate">/</string>
+</resources>

@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="8dp"
+    android:layout_marginEnd="8dp"
+    android:layout_marginTop="8dp"
+    android:layout_marginBottom="8dp"
+    android:elevation="16dp"
+    app:cardCornerRadius="16dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="12dp">
+        <LinearLayout
+            android:id="@+id/layoutOfOrderNoAndOrderDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+    <TextView
+        android:text="128"
+        android:id="@+id/orderNoOnCard"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+
+        android:textSize="20sp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
+        <TextView
+            android:text="28/08/1996"
+            android:id="@+id/orderDateOnCard"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="italic"
+            android:gravity="center"
+            android:textSize="12sp"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/layoutOfNameAndItem"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_toEndOf="@id/layoutOfOrderNoAndOrderDate"
+            android:layout_marginStart="2dp">
+
+    <TextView
+        android:text="ZIYAD RAHMAN"
+        android:layout_marginStart="8dp"
+        android:id="@+id/customerNameOnCard"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:textStyle="bold"
+        android:layout_gravity="start"
+        android:foregroundGravity="left"
+        android:textAppearance="@style/TextAppearance.AppCompat.Small"/>
+        <TextView
+            android:text="SHIRT"
+            android:id="@+id/itemNameOnCard"
+            android:layout_width="wrap_content"
+
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_marginStart="1sp"
+            android:textSize="14sp"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"/>
+        </LinearLayout>
+<LinearLayout
+    android:id="@+id/handWorkCardLayout"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:layout_alignParentTop="true"
+    android:layout_alignParentEnd="true"
+    android:padding="2dp">
+        <TextView
+            android:id="@+id/handWorkOnCard"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="HAND WORK"
+           />
+
+        <ImageView
+
+            android:id="@+id/handWorkOnImageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_check_circle_black_24dp"
+            android:visibility="gone"
+            android:layout_gravity="center_vertical"
+
+
+            />
+        <ImageView
+            android:id="@+id/handWorkOffImageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_cancel_black_24dp"
+            android:visibility="visible"
+            />
+
+</LinearLayout>
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/workCompleteSwitch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Work Complete "
+            android:layout_below="@id/handWorkCardLayout"
+            android:layout_alignParentEnd="true"
+            android:checked="false"
+            android:visibility="visible"
+            android:textOn="On"
+            android:textOff="Off"
+
+
+            />
+
+      <androidx.appcompat.widget.AppCompatTextView
+          android:id="@+id/workCompleteSwitchTab"
+          android:layout_below="@id/workCompleteSwitch"
+          android:layout_alignParentEnd="true"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:background="@drawable/roundedrectangle"
+          android:text="Completed"
+          android:textColor="@color/white"
+          android:gravity="center_horizontal"
+          android:visibility="gone"
+          />
+
+    </RelativeLayout>
+
+
+</com.google.android.material.card.MaterialCardView>
