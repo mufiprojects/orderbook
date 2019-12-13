@@ -8,4 +8,6 @@
   <color name="secondaryDarkColor">#883997</color>
   <color name="primaryTextColor">#000000</color>
   <color name="secondaryTextColor">#fafafa</color>
+  <color name="textColorOnTab">#817D83</color>
+  <color name="orderOverviewTextColor">#B169D4</color>
 </resources>

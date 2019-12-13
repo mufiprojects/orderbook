@@ -8,9 +8,12 @@ import android.content.Context;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,13 +21,18 @@ import android.widget.Toast;
 //import com.github.badoualy.datepicker.TimelineView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.tabs.TabLayout;
 import com.vivekkaushik.datepicker.DatePickerTimeline;
 import com.vivekkaushik.datepicker.OnDateSelectedListener;
+
+import org.w3c.dom.Text;
 
 import java.text.DateFormat;
 import java.util.Calendar;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.widget.TextViewCompat;
 import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -36,8 +44,10 @@ public class MainActivity extends AppCompatActivity {
     FloatingActionButton floatingActionButton;
     DatabaseHelper myDb;
     RecyclerView orderListRecyclerView;
+    TabLayout tabLayout;
     private RecyclerView.LayoutManager layoutManager;
      orderListAdapter orderListAdapter;
+
          DatePickerTimeline datePicker;
 
     @Override
@@ -45,11 +55,14 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         myDb = new DatabaseHelper(this);
-        notification();
-
-
-
-         datePicker = findViewById(R.id.datePickerTimeline);
+//       Toolbar toolbar = findViewById(R.id.toolbar);
+//
+//
+//       setSupportActionBar(toolbar);
+       notification();
+       createTabItems();
+       tabLayout=(TabLayout) findViewById(R.id.tabs);
+        datePicker = findViewById(R.id.datePickerTimeline);
         floatingActionButton = (FloatingActionButton) findViewById(R.id.fabBtn);
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -110,10 +123,11 @@ public class MainActivity extends AppCompatActivity {
     }
     public void notification()
     {
+
        long systemTime=System.currentTimeMillis();
         Calendar calendar=Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY,9);
-        calendar.set(Calendar.MINUTE,30);
+        calendar.set(Calendar.HOUR_OF_DAY,11);
+        calendar.set(Calendar.MINUTE,10);
         calendar.set(Calendar.SECOND,0);
         Intent intent=new Intent(getApplicationContext(),Notification_reciever.class);
         PendingIntent pendingIntent=PendingIntent.getBroadcast(getApplicationContext(),100,intent,PendingIntent.FLAG_UPDATE_CURRENT);
@@ -123,8 +137,24 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+    public void createTabItems() {
+       View view = LayoutInflater.from(this).inflate(R.layout.tabitem,null);
+        ImageView customImageView=(ImageView)view.findViewById(R.id.tabIcon);
+        customImageView.setImageResource(R.drawable.man_user);
+        TextView tabTitile=(TextView) view.findViewById(R.id.tabTitle);
+        tabTitile.setText(R.string.username);
+        TextView orderDetails=(TextView) view.findViewById(R.id.orderdetails);
+        orderDetails.setText(R.string.orderdetails);
+
+//        try {
+            tabLayout.addTab(tabLayout.newTab().setCustomView(view));
+//        } catch (NullPointerException e) {
+//            e.printStackTrace();
+//        }
+
+    }
+
+    }
+@
 
 
-
-
-}

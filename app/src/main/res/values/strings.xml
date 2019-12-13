@@ -2,4 +2,7 @@
     <string name="app_name">Saffron</string>
     <string name="orderNoHint"><font size="20">ORDER NO</font></string>
     <string name="spaceBetweenDate">/</string>
+    <string name="username">Me</string>
+    <string name="allusers">All</string>
+    <string name="orderdetails">50 out of 100</string>
 </resources>

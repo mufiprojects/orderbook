@@ -33,8 +33,8 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 public class OrderActivity extends AppCompatActivity {
-    static TextView orderDateText;
-    static TextView delDateText;
+     TextView orderDateText;
+     TextView delDateText;
 
 
     static int orderDate;
@@ -60,7 +60,7 @@ public class OrderActivity extends AppCompatActivity {
     FloatingActionButton cancel_fab;
 
 
-    static FrameLayout fragmentContainer;
+     FrameLayout fragmentContainer;
 
     //JAVA DATA TYPES
 

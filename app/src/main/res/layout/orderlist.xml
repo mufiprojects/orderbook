@@ -7,131 +7,151 @@
     android:layout_marginStart="8dp"
     android:layout_marginEnd="8dp"
     android:layout_marginTop="8dp"
+    app:cardBackgroundColor="#b607ff"
+
     android:layout_marginBottom="8dp"
     android:elevation="16dp"
     app:cardCornerRadius="16dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     >
+
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#b607ff"
         android:padding="12dp">
+
         <LinearLayout
             android:id="@+id/layoutOfOrderNoAndOrderDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-    <TextView
-        android:text="128"
-        android:id="@+id/orderNoOnCard"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
 
-        android:textSize="20sp"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
-        <TextView
-            android:text="28/08/1996"
-            android:id="@+id/orderDateOnCard"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textStyle="italic"
-            android:gravity="center"
-            android:textSize="12sp"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
+            <TextView
+                android:id="@+id/orderNoOnCard"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="128"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textColor="@color/white"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/orderDateOnCard"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="28/08/1996"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textColor="@color/white"
+                android:textSize="12sp"
+                android:textStyle="italic" />
         </LinearLayout>
+
         <LinearLayout
             android:id="@+id/layoutOfNameAndItem"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
+            android:layout_marginStart="8dp"
+            android:layout_centerInParent="true"
             android:layout_toEndOf="@id/layoutOfOrderNoAndOrderDate"
-            android:layout_marginStart="2dp">
+            android:orientation="vertical">
 
-    <TextView
-        android:text="ZIYAD RAHMAN"
-        android:layout_marginStart="8dp"
-        android:id="@+id/customerNameOnCard"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:textStyle="bold"
-        android:layout_gravity="start"
-        android:foregroundGravity="left"
-        android:textAppearance="@style/TextAppearance.AppCompat.Small"/>
-        <TextView
-            android:text="SHIRT"
-            android:id="@+id/itemNameOnCard"
-            android:layout_width="wrap_content"
+            <TextView
+                android:id="@+id/customerNameOnCard"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
 
-            android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:layout_marginStart="1sp"
-            android:textSize="14sp"
-            android:textAppearance="@style/TextAppearance.AppCompat.Small"/>
+                android:foregroundGravity="left"
+                android:gravity="center_vertical"
+
+                android:text="ZIYAD RAHMAN"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:textColor="@color/white"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/itemNameOnCard"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+
+                android:layout_marginStart="1sp"
+                android:text="SHIRT"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:textSize="14sp" />
+            <LinearLayout
+                android:id="@+id/handWorkCardLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+
+                android:orientation="horizontal"
+                android:padding="2dp">
+                <TextView
+                    android:textColor="@color/white"
+                    android:id="@+id/handWorkOnCard"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="HAND WORK" />
+
+                <ImageView
+
+                    android:id="@+id/handWorkOnImageView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/ic_check_circle_black_24dp"
+                    android:visibility="gone"
+
+
+                    />
+
+                <ImageView
+                    android:id="@+id/handWorkOffImageView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_cancel_black_24dp"
+                    android:visibility="visible" />
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/workCompleteSwitchTab"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/workCompleteSwitch"
+                    android:layout_alignParentEnd="true"
+                    android:background="@drawable/roundedrectangle"
+                    android:gravity="center_horizontal"
+                    android:text="Completed"
+                    android:textColor="@color/white"
+                    android:visibility="gone" />
+
+                <androidx.appcompat.widget.SwitchCompat
+                    android:textColor="@color/white"
+                    android:id="@+id/workCompleteSwitch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+
+                    android:checked="false"
+                    android:text="Work Complete"
+                    android:textAppearance="@android:style/TextAppearance.Small"
+                    android:textAllCaps="true"
+                    android:textOff="Off"
+                    android:textOn="On"
+                    android:visibility="visible"
+
+
+                    />
+
+
+            </LinearLayout>
         </LinearLayout>
-<LinearLayout
-    android:id="@+id/handWorkCardLayout"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:layout_alignParentTop="true"
-    android:layout_alignParentEnd="true"
-    android:padding="2dp">
-        <TextView
-            android:id="@+id/handWorkOnCard"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="HAND WORK"
-           />
-
-        <ImageView
-
-            android:id="@+id/handWorkOnImageView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_check_circle_black_24dp"
-            android:visibility="gone"
-            android:layout_gravity="center_vertical"
 
 
-            />
-        <ImageView
-            android:id="@+id/handWorkOffImageView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_cancel_black_24dp"
-            android:visibility="visible"
-            />
-
-</LinearLayout>
-        <androidx.appcompat.widget.SwitchCompat
-            android:id="@+id/workCompleteSwitch"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Work Complete "
-            android:layout_below="@id/handWorkCardLayout"
-            android:layout_alignParentEnd="true"
-            android:checked="false"
-            android:visibility="visible"
-            android:textOn="On"
-            android:textOff="Off"
 
 
-            />
-
-      <androidx.appcompat.widget.AppCompatTextView
-          android:id="@+id/workCompleteSwitchTab"
-          android:layout_below="@id/workCompleteSwitch"
-          android:layout_alignParentEnd="true"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:background="@drawable/roundedrectangle"
-          android:text="Completed"
-          android:textColor="@color/white"
-          android:gravity="center_horizontal"
-          android:visibility="gone"
-          />
 
     </RelativeLayout>
 
