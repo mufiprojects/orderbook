@@ -1,20 +1,16 @@
-package com.example.android.saffrondesigner;
+package com.example.android.saffronfromzr;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.vivekkaushik.datepicker.DatePickerTimeline;
 import com.vivekkaushik.datepicker.OnDateSelectedListener;
 
@@ -25,9 +21,6 @@ import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.SwitchCompat;
-import androidx.core.widget.TextViewCompat;
-import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class orderListAdapter extends RecyclerView.Adapter<orderListAdapter.orderListHolder> {
@@ -66,27 +59,36 @@ public class orderListAdapter extends RecyclerView.Adapter<orderListAdapter.orde
 
     @Override
     public void onBindViewHolder(@NonNull final orderListHolder holder, final int position) {
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent orderDetailsActivity = new Intent(context, orderDetailsActivity.class);
+                orderDetailsActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(orderDetailsActivity);
+            }
+        });
         myDb=new DatabaseHelper(context);
         final orderbook orderbook = orderbookList.get(position);
-        int  orderNo=orderbook.orderNo;
+
         holder.orderno.setText(orderbook.orderNo + " ");
         holder.customerName.setText(orderbook.customerName);
         holder.itemName.setText(orderbook.itemName);
-        if (orderbook.isWorkComplete==1)
-        {
-            showCompleted(holder);
-        }
-        else
-     holder.workCompleteSwicth.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-         @Override
-         public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-             if (holder.workCompleteSwicth.isChecked())
-             {
-                 myDb.InsertWorkComplete(1,orderbook.orderNo);
-                 showCompleted(holder);
-             }
-         }
-     });
+//        if (orderbook.isWorkComplete==1)
+//        {
+//            showCompleted(holder);
+//        }
+//        else
+//     holder.workCompleteSwicth.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//         @Override
+//         public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+//             if (holder.workCompleteSwicth.isChecked())
+//             {
+//                 myDb.InsertWorkComplete(1,orderbook.orderNo);
+//                 showCompleted(holder);
+//             }
+//         }
+//     });
 
 
         char[] orderDateCharArray = orderbook.orderDateString.trim().toCharArray();
@@ -145,15 +147,15 @@ public class orderListAdapter extends RecyclerView.Adapter<orderListAdapter.orde
         }
 
         holder.orderDateString.setText(String.valueOf(convertedArray));
-        if (orderbook.isHandWork==1){
-            holder.handWorkOn.setVisibility(View.VISIBLE);
-            holder.handWorkOff.setVisibility(View.GONE);
-        }
-        else if (orderbook.isHandWork==0){
-            holder.handWorkOff.setVisibility(View.VISIBLE);
-            holder.handWorkOn.setVisibility(View.GONE);
-
-        }
+//        if (orderbook.isHandWork==1){
+//            holder.handWorkOn.setVisibility(View.VISIBLE);
+//            holder.handWorkOff.setVisibility(View.GONE);
+//        }
+//        else if (orderbook.isHandWork==0){
+//            holder.handWorkOff.setVisibility(View.VISIBLE);
+//            holder.handWorkOn.setVisibility(View.GONE);
+//
+//        }
 
     }
 
@@ -179,28 +181,18 @@ public class orderListAdapter extends RecyclerView.Adapter<orderListAdapter.orde
             handWorkOn=itemView.findViewById(R.id.handWorkOnImageView);
             handWorkOff=itemView.findViewById(R.id.handWorkOffImageView);
             orderDateString=itemView.findViewById(R.id.orderDateOnCard);
-            workCompleteSwicth=itemView.findViewById(R.id.workCompleteSwitch);
-            workCompleteSwitchTab=itemView.findViewById(R.id.workCompleteSwitchTab);
+//            workCompleteSwicth=itemView.findViewById(R.id.workCompleteSwitch);
+//            workCompleteSwitchTab=itemView.findViewById(R.id.workCompleteSwitchTab);
 
-            itemView.setOnLongClickListener(new View.OnLongClickListener() {
 
-                @Override
-                public boolean onLongClick(View view) {
-
-                    int position=getAdapterPosition();
-                    final orderbook orderbook = orderbookList.get(position);
-                    openBottomSheet(view,orderbook.orderNo,position);
-                    return false;
-                }
-            });
 
         }
     }
-    public void showCompleted(orderListHolder holder)
-    {
-        holder.workCompleteSwicth.setVisibility(View.GONE);
-        holder.workCompleteSwitchTab.setVisibility(View.VISIBLE);
-    }
+//    public void showCompleted(orderListHolder holder)
+//    {
+//        holder.workCompleteSwicth.setVisibility(View.GONE);
+//        holder.workCompleteSwitchTab.setVisibility(View.VISIBLE);
+//    }
     private void openBottomSheet(View v, final int orderNo, final int position){
         final Context context=v.getContext();
         LayoutInflater inflater=(LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);

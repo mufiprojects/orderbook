@@ -1,4 +1,4 @@
-package com.example.android.saffrondesigner;
+package com.example.android.saffronfromzr;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

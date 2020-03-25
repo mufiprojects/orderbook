@@ -1,4 +1,4 @@
-package com.example.android.saffrondesigner;
+package com.example.android.saffronfromzr;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -6,9 +6,7 @@ import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.nfc.Tag;
 import android.util.Log;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -83,11 +81,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             if (cursor.moveToFirst()){
                 do {
                     orderbook orderbook=new orderbook();
-                    orderbook.orderNo=cursor.getInt(cursor.getColumnIndex(COLUMN_ORDERNO));
+
                     orderbook.orderDateString=cursor.getString(cursor.getColumnIndex(COLUMN_ORDERDATE));
                     orderbook.customerName=cursor.getString(cursor.getColumnIndex(COLUMN_CUSTOMERNAME));
                     orderbook.itemName=cursor.getString(cursor.getColumnIndex(COLUMN_ITEMNAME));
-                    orderbook.isHandWork=cursor.getInt(cursor.getColumnIndex(COLUMN_ISHANDWORK));
+
                     orderbook.isWorkComplete=cursor.getInt(cursor.getColumnIndex(COLUMN_ISWORKCOMPLETE));
 
                     orderbookArrayList.add(orderbook);

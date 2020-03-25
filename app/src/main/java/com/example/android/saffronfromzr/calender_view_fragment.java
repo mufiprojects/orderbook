@@ -1,4 +1,4 @@
-package com.example.android.saffrondesigner;
+package com.example.android.saffronfromzr;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -13,18 +13,16 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
-import static com.example.android.saffrondesigner.OrderActivity.delDate;
-import static com.example.android.saffrondesigner.OrderActivity.delMonth;
-import static com.example.android.saffrondesigner.OrderActivity.delYear;
+import static com.example.android.saffronfromzr.OrderActivity.delDate;
+import static com.example.android.saffronfromzr.OrderActivity.delMonth;
+import static com.example.android.saffronfromzr.OrderActivity.delYear;
 
-import static com.example.android.saffrondesigner.OrderActivity.isDel;
-import static com.example.android.saffrondesigner.OrderActivity.isOrder;
-import static com.example.android.saffrondesigner.OrderActivity.orderDate;
-import static com.example.android.saffrondesigner.OrderActivity.orderMonth;
-import static com.example.android.saffrondesigner.OrderActivity.orderYear;
+import static com.example.android.saffronfromzr.OrderActivity.isDel;
+import static com.example.android.saffronfromzr.OrderActivity.isOrder;
+import static com.example.android.saffronfromzr.OrderActivity.orderDate;
+import static com.example.android.saffronfromzr.OrderActivity.orderMonth;
+import static com.example.android.saffronfromzr.OrderActivity.orderYear;
 
 public class calender_view_fragment extends Fragment {
 

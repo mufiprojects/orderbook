@@ -1,7 +1,7 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/primaryColor</item>
         <item name="colorPrimaryDark">@color/primaryDarkColor</item>
@@ -13,9 +13,17 @@
     <style name="HintText" parent="TextAppearance.AppCompat">
         <item name="android:textSize">8sp</item>
     </style>
+    <style name="textBoxStyle" parent="Widget.MaterialComponents.TextInputLayout.FilledBox">
+        <item name="android:textColorHint">@color/hintTextColor</item>
+        <item name="android:textSize">24sp</item>
+    </style>
     <style name="ToolbarTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
         <item name="android:fontFamily">@font/calistogaregular</item>
         <item name="android:paddingStart">16dp</item>
         <item name="android:textSize">500sp</item>
     </style>
+
+<!--    <style name="ChipTextApperance" parent="Widget.MaterialComponents.Chip.Entry">-->
+<!--        <item name="android:textColor">@color/white</item>-->
+<!--    </style>-->
 </resources>

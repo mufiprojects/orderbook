@@ -1,8 +1,26 @@
 <resources>
     <string name="app_name">Saffron</string>
-    <string name="orderNoHint"><font size="20">ORDER NO</font></string>
+    <string name="orderNoHint"><font size="16sp">Order no</font></string>
     <string name="spaceBetweenDate">/</string>
     <string name="username">Me</string>
     <string name="allusers">All</string>
     <string name="orderdetails">50 out of 100</string>
+    <string name="workCompleteText">Work Complete ? </string>
+    <string name="backButtonText">Back</string>
+    <string name="handWork">Hand Work</string>
+    <string name="completed">Completed</string>
+    <string name="addorder">Add Order</string>
+    <string name="no">X</string>
+    <string name="orderDate">ORDER DATE</string>
+    <string name="delDate">DELIVERY DATE</string>
+    <string name="pick">PICK</string>
+    <string name="isHandWork">Hand Work?</string>
+    <string name="slash">/</string>
+    <string name="addText">Add</string>
+    <string name="itemNotFound">Item Not Found</string>
+    <string name="items">Items</string>
+    <string name="name">Enter Your Name</string>
+    <string name="tapSingnInButton">and tap sign in.</string>
+    <string name="hiDesigner">Hi Designer</string>
+    <string name="Outof">Out Of</string>
 </resources>

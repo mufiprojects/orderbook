@@ -7,9 +7,11 @@
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabs"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="70dp"
+        android:elevation="10dp"
         app:tabGravity="fill"
         app:tabMode="fixed"
+        app:tabIndicatorColor="@color/orderOverviewTextColor"
         />
 
 
@@ -20,25 +22,26 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginTop="18dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         >
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/timlineContainer"
-            android:layout_margin="5dp"
+
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:cardBackgroundColor="#6e1f92"
+            app:cardBackgroundColor="@color/primaryColor"
             app:cardCornerRadius="10dp">
             <com.vivekkaushik.datepicker.DatePickerTimeline
                 android:padding="2dp"
                 android:id="@+id/datePickerTimeline"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="100dp"
                 android:layout_marginStart="0dp"
                 android:layout_marginTop="0dp"
                 android:layout_marginEnd="0dp"
-                android:background="#6e1f92"
+                android:background="@color/primaryColor"
                 app:dateTextColor="@color/white"
                 app:dayTextColor="@color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -53,27 +56,44 @@
 
     </LinearLayout>
 
+    <TextView
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/orderListRecyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:id="@+id/deliveryContainerText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="14dp"
+        android:layout_marginBottom="6dp"
         android:layout_below="@id/datePickerTimelineLayout"
-        android:layout_marginTop="8dp"
+        android:fontFamily="sans-serif"
+        android:text="Today Delivery"
+        android:textSize="23sp"
 
-         />
+        />
 
+<!--    <androidx.recyclerview.widget.RecyclerView-->
+<!--        android:id="@+id/orderListRecyclerView"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:layout_below="@id/datePickerTimelineLayout"-->
+<!--        android:layout_marginTop="34dp"-->
+
+<!--        />-->
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/viewPager"
+        android:layout_below="@id/deliveryContainerText"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
     <com.google.android.material.floatingactionbutton.FloatingActionButton
 
     android:id="@+id/fabBtn"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    app:backgroundTint="#b169d4"
+    app:backgroundTint="#F15E6D"
     android:layout_alignParentBottom="true"
     android:layout_centerInParent="true"
     android:elevation="6dp"
     android:layout_marginBottom="20dp"
-    android:src="@drawable/ic_add_black_24dp"
+    android:src="@drawable/plus_icon"
 
 
 

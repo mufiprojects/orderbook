@@ -1,4 +1,4 @@
-package com.example.android.saffrondesigner;
+package com.example.android.saffronfromzr;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
