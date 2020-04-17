@@ -21,13 +21,14 @@
         android:id="@+id/datePickerTimelineLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:visibility="visible"
         android:orientation="vertical"
         android:layout_marginTop="18dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         >
         <com.google.android.material.card.MaterialCardView
-            android:id="@+id/timlineContainer"
+            android:id="@+id/timelineContainer"
 
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -55,34 +56,82 @@
         </com.google.android.material.card.MaterialCardView>
 
     </LinearLayout>
-
-    <TextView
-
-        android:id="@+id/deliveryContainerText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="14dp"
-        android:layout_marginBottom="6dp"
+    <LinearLayout
+        android:id="@+id/searchLayout"
         android:layout_below="@id/datePickerTimelineLayout"
-        android:fontFamily="sans-serif"
-        android:text="Today Delivery"
-        android:textSize="23sp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:layout_margin="16dp"
+        android:orientation="vertical"
+        >
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:hint="Type Order No."
 
-        />
 
-<!--    <androidx.recyclerview.widget.RecyclerView-->
-<!--        android:id="@+id/orderListRecyclerView"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="match_parent"-->
-<!--        android:layout_below="@id/datePickerTimelineLayout"-->
-<!--        android:layout_marginTop="34dp"-->
+            >
 
-<!--        />-->
+            <com.google.android.material.textfield.TextInputEditText
+
+                android:id="@+id/searchText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/white"
+                android:background="@color/white"
+                android:inputType="number"
+                android:textSize="12sp"
+
+                />
+        </com.google.android.material.textfield.TextInputLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:orientation="horizontal"
+            android:layout_gravity="end">
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/cancel_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="1dp"
+            app:cornerRadius="18dp"
+            app:backgroundTint="@color/backButtonColor"
+            android:text="CANCEL"
+            android:textColor="@color/white"
+            android:layout_gravity="end"
+
+            />
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/go_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="invisible"
+            android:layout_marginEnd="1dp"
+            app:cornerRadius="18dp"
+            app:backgroundTint="@color/backButtonColor"
+            android:text="GO"
+            android:textColor="@color/white"
+            android:layout_gravity="end"
+
+            />
+    </LinearLayout>
+    </LinearLayout>
+
+
+
+
+
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/viewPager"
-        android:layout_below="@id/deliveryContainerText"
+        android:layout_below="@id/searchLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="wrap_content"/>
+
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
 
     android:id="@+id/fabBtn"

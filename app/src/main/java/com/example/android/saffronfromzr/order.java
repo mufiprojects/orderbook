@@ -11,16 +11,21 @@ public class order {
     private String deliveryDate;
     private String customerName;
     private Boolean isHandWork;
-    HashMap<String,Boolean> items=new HashMap<>();
+    private Boolean workComplete;
+    private String designerId;
+    private String designerId_deliveryDate;
+   private HashMap<String,String> items=new HashMap<>();
     public order()
     {
 
     }
 
 
-    public order(String orderDate, String deliveryDate, String customerName,Boolean isHandWork,HashMap<String, Boolean> items)
+    public order(String designerId_deliveryDate,String designerId,String orderDate, String deliveryDate, String customerName,Boolean isHandWork,HashMap<String, String> items,Boolean workComplete)
     {
-
+        this.workComplete=workComplete;
+        this.designerId_deliveryDate=designerId_deliveryDate;
+        this.designerId=designerId;
         this.orderDate=orderDate;
         this.deliveryDate=deliveryDate;
         this.customerName=customerName;
@@ -29,6 +34,17 @@ public class order {
 
     }
 
+    public Boolean getWorkComplete() {
+        return workComplete;
+    }
+
+    public String getDesignerId_deliveryDate() {
+        return designerId_deliveryDate;
+    }
+
+    public String getDesignerId() {
+        return designerId;
+    }
 
     public String getOrderDate() {
         return orderDate;
@@ -46,7 +62,7 @@ public class order {
         return isHandWork;
     }
 
-    public HashMap<String, Boolean> getItems() {
+    public HashMap<String, String> getItems() {
         return items;
     }
 }

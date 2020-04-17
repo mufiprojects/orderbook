@@ -36,7 +36,6 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:gravity="center_vertical"
-                            android:text="@string/addorder"
                             android:textSize="23sp"
                             android:textColor="@color/primaryColor"
                             android:layout_marginTop="13dp"
@@ -258,34 +257,7 @@
                 android:baselineAligned="false"
                 android:orientation="horizontal">
 
-                <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:focusableInTouchMode="true"
-                    android:theme="@style/textBoxStyle"
-                    android:hint="Order no"
-                    >
 
-
-                    <com.google.android.material.textfield.TextInputEditText
-
-                        android:id="@+id/orderNo"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginEnd="10dp"
-                        android:background="@color/white"
-                        android:imeOptions="actionNext"
-                        android:inputType="number"
-                        android:nextFocusForward="@id/customerName"
-                        android:textSize="12sp"
-
-
-                        />
-
-                </com.google.android.material.textfield.TextInputLayout>
 
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -438,22 +410,6 @@
 </RelativeLayout>
 </ScrollView>
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-
-
-                android:id="@+id/cancel_fab"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:backgroundTint="@color/white"
-            android:layout_centerHorizontal="true"
-            android:layout_alignParentBottom="true"
-            android:foregroundGravity="center_horizontal"
-                android:elevation="6dp"
-            android:layout_marginBottom="8dp"
-                android:src="@drawable/ic_cancel_black_24dp"
-
-
-                />
 
 
 

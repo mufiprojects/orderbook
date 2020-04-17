@@ -4,52 +4,32 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
-import android.text.Spanned;
 import android.text.TextWatcher;
-import android.transition.ChangeBounds;
-import android.transition.Visibility;
 import android.util.Log;
-import android.util.Pair;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
-import android.widget.CalendarView;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.Toolbar;
 
 import com.github.florent37.singledateandtimepicker.dialog.DoubleDateAndTimePickerDialog;
 import com.github.florent37.singledateandtimepicker.dialog.SingleDateAndTimePickerDialog;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.chip.Chip;
-import com.google.android.material.chip.ChipDrawable;
 import com.google.android.material.chip.ChipGroup;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-import com.hootsuite.nachos.ChipConfiguration;
 import com.hootsuite.nachos.NachoTextView;
-import com.hootsuite.nachos.chip.ChipCreator;
-import com.hootsuite.nachos.chip.ChipSpan;
-import com.hootsuite.nachos.chip.ChipSpanChipCreator;
 import com.hootsuite.nachos.terminator.ChipTerminatorHandler;
-import com.hootsuite.nachos.tokenizer.ChipTokenizer;
-import com.hootsuite.nachos.tokenizer.SpanChipTokenizer;
-
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -57,68 +37,51 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.TimeZone;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
-import androidx.core.content.ContextCompat;
+
+import static com.example.android.saffronfromzr.common.currentUser;
 
 public class OrderActivity extends AppCompatActivity {
+
      TextView orderDateText;
      TextView delDateText;
      TextView pickDelDateText;
      TextView addOrderTextView;
+     TextInputEditText  customerNameEditText;
+     NachoTextView itemNameEditText;
 
-    static int orderDate;
-    static int orderMonth;
-    static int orderYear;
-    static int isOrder;
-    static int isDel;
-    static int delDate;
-    static int delMonth;
-    static int delYear;
-    public static final String DATE_FORMAT="dd/MM/yyyy";
+     CardView orderDateCard, delDateCard;
+     LinearLayout handWorkLayout;
 
-    int todayDate, todayMonth, todayYear;
-
-
-
-
-    CardView orderDateCard, delDateCard, handWorkCard;
-    LinearLayout handWorkLayout,itemNotFoundLayout;
-    ProgressBar progressBar;
-    CalendarView pickOrderDate;
-
-
-    TextInputEditText orderNoEditText, customerNameEditText;
-    NachoTextView itemNameEditText;
-    RadioGroup isHandWork;
-    RadioButton handWorkOn,handWorkOff;
-
-    DatabaseHelper myDb;
-    FloatingActionButton cancel_fab;
-
-    FirebaseAuth mAuth;
-
-     FirebaseDatabase database=FirebaseDatabase.getInstance();
-    DatabaseReference databaseOrders;
-    DatabaseReference databaseItems;
-    DatabaseReference databaseDeliveryDates;
-
-     FrameLayout fragmentContainer;
-
+     ProgressBar progressBar;
+     RadioGroup isHandWork;
+     RadioButton handWorkOn,handWorkOff;
      MaterialButton backButton;
      MaterialButton addItemButton;
-
      ChipGroup itemSuggestionChipGroup;
 
-     Toolbar toolbar;
+
+
+
+     //FIREBASE DATABASE
+     FirebaseDatabase database=FirebaseDatabase.getInstance();
+     DatabaseReference databaseOrders;
+     DatabaseReference databaseItems;
+     DatabaseReference databaseDeliveryDates;
+     DatabaseReference noOfOrdersComplete;
+
+
+
     private String deliveryDateString="1";
     private String orderDateString;
     private String customerName="";
-    private int orderno=0;
+    private int orderno;
+    String orderNo;
 
      Boolean alreadyAdded =false;
      Boolean isHandWorkChecked=false;
@@ -127,25 +90,38 @@ public class OrderActivity extends AppCompatActivity {
     List<String> stringChipList;
     List<com.hootsuite.nachos.chip.Chip> chipList;
     public int chipListLength;
-    HashMap<String,String> items=new HashMap<>();
-    HashMap<String, Boolean> itemsToOrder = new HashMap<>();
+//    HashMap<String,String> items=new HashMap<>();
+
+    Map<String, String> items=new HashMap<>();;
+    HashMap<String, String> itemsToOrder = new HashMap<>();
     HashMap<String,String> itemsSuggestionList=new HashMap<>();
+
     final  int VISIBILE=0;
     final int INVISBILE=4;
     final int GONE=8;
-    //JAVA DATA TYPES
 
+    //VARIABLES
+    Boolean iSFetchAllItems=true;
+    //FINAL VARIABLES
+    public static final String DATE_FORMAT="dd/MM/yyyy";
+
+    //OBJECTS
+    common common=new common();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order);
 
-        myDb = new DatabaseHelper(this);
-        mAuth=FirebaseAuth.getInstance();
+
+
         databaseOrders=database.getReference("orders");
         databaseItems=database.getReference("items");
         databaseDeliveryDates=database.getReference("deliveryDates");
+        noOfOrdersComplete = database.getReference("noOfOrdersComplete");
+        fetchAllItems();
+        common.fetchNoOfTotalOrders();
+        common.fetchNoOfUserTotalOrders();
 
 //        databaseOrders= FirebaseDatabase.getInstance().getReference("orders");
 //       databaseItems=FirebaseDatabase.getInstance().getReference("items").push();
@@ -167,13 +143,13 @@ public class OrderActivity extends AppCompatActivity {
         addOrderTextView=(TextView)findViewById(R.id.addOrderTextView);
         orderDateCard = (CardView) findViewById(R.id.orderDateCard);
         delDateCard = (CardView) findViewById(R.id.delDateCard);
-//        handWorkCard = (CardView) findViewById(R.id.handWorkCard);
 
 
-        pickOrderDate = (CalendarView) findViewById(R.id.pickOrderDate);
-        fragmentContainer = (FrameLayout) findViewById(R.id.fragmentContainer);
 
-        orderNoEditText = (TextInputEditText) findViewById(R.id.orderNo);
+
+
+
+
 
 
         customerNameEditText = (TextInputEditText) findViewById(R.id.customerName);
@@ -185,132 +161,29 @@ public class OrderActivity extends AppCompatActivity {
         handWorkOff=(RadioButton)findViewById(R.id.handWorkOff);
 
         handWorkLayout = (LinearLayout) findViewById(R.id.handWorkLayout);
-        itemNotFoundLayout=(LinearLayout) findViewById(R.id.itemNotFoundLayout);
-        progressBar = (ProgressBar) findViewById(R.id.progressBar);
 
-        cancel_fab=(FloatingActionButton) findViewById(R.id.cancel_fab);
+        progressBar = (ProgressBar) findViewById(R.id.progressBar);
 
         backButton=(MaterialButton)findViewById(R.id.backButton);
         addItemButton=(MaterialButton)findViewById(R.id.addItemButton);
 
         itemSuggestionChipGroup=(ChipGroup) findViewById(R.id.itemSuggestionChipGroup);
-            setTodayDate();
-//            orderDateToString();
-
-//        //Setting for default is Today Date
-////        if (orderDate == 0 && orderMonth == 0 && orderYear == 0) {
-
-//
-////        }
-//        else if (orderDate >= 1 && orderMonth >= 1 && orderYear >= 1) {
-//            selectedOrderDate();
-//            orderDateToString();
-//        }
-
-        //When user pick a date from calender_view_fragment
-
-        //Checking delDate selected if not TEXT is PICK DELIVERY DATE
-//        if (delDate == 0 && delMonth == 0 && delYear == 0) {
-//            delDateToString();
-//        }
-//        //if yes shows picked DELIVERY DATE
-//        else {
-//            picDelDateText.setVisibility(View.GONE);
-//            delDateToString();
-//            delDateText.setText(delDate + "/" + delMonth + "/" + delYear);
-//        }
-
-
-        orderDateCard.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View view) {
-//                isOrder = 1; // setting orderCard is true
-//                isDel = 0;
-//
-//                fragmentContainer.setVisibility(View.VISIBLE);
-//                FragmentManager fragmentManager = getSupportFragmentManager();
-//                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//                calender_view_fragment calender_view_fragment = new calender_view_fragment();
-//                fragmentTransaction.add(R.id.fragmentContainer, calender_view_fragment);
-//                fragmentTransaction.commit();
-                Boolean isOrderDateCardSelected=true;
-                openBottonCalender(isOrderDateCardSelected);
-
-
-            }
-        });
-        delDateCard.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-//                isDel = 1; //setting deliveryCard is true
-//                isOrder = 0;
-//
-//                fragmentContainer.setVisibility(View.VISIBLE);
-//                FragmentManager fragmentManager = getSupportFragmentManager();
-//                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//                calender_view_fragment calender_view_fragment = new calender_view_fragment();
-//                fragmentTransaction.add(R.id.fragmentContainer, calender_view_fragment);
-//                fragmentTransaction.commit();
-
-                openBottonCalender(false);
-            }
-        });
-        if (delDate >= 1) //When deliveryDate is greater than 0 orderNo Text Keyboard shows
-        {
-
-
-            orderNoEditText.requestFocus();
-
-            keyBoardUp();
-
-        }
-orderNoEditText.addTextChangedListener(new TextWatcher() {
-
-    @Override
-    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-    }
-
-    @Override
-    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-
-
-    }
-
-    @Override
-    public void afterTextChanged(Editable editable) {
         getOrderNo();
-        if (isHandWorkChecked) {
-            if (checkRadioGroupActive(isHandWork)) {
-                setRadioGroupUncheck(isHandWork);
-            }
-        }
-        if (validation())
-        {
-            setHandWorkLayoutVisibility(VISIBILE);
-            setAddOrderTextViewVisibility(INVISBILE);
-            backButtonVisibility(GONE);
-        }
-        else
-        {
-            setHandWorkLayoutVisibility(GONE);
-            setAddOrderTextViewVisibility(VISIBILE);
-            backButtonVisibility(VISIBILE);
-        }
-//       orderno =getOrderNo();
-//        if (myDb.rowIdExists(orderno))
-//        {
-//            orderNo.setError(orderno+" Already exits");
-//
-//        }
+            setTodayDate();
+            addOrderTextView.setText(getString(R.string.addorder,getOrderNo()));
 
-
-
-    }
-});
-
+            orderDateCard.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    openBottonCalender(true);
+                }
+            });
+            delDateCard.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    openBottonCalender(false);
+                }
+            });
         customerNameEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -346,8 +219,7 @@ orderNoEditText.addTextChangedListener(new TextWatcher() {
             itemNameEditText.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                    orderDateToString();
-                    delDateToString();
+
                     getCustomerName();
                     if (getItemName().isEmpty())
                     {
@@ -411,6 +283,8 @@ orderNoEditText.addTextChangedListener(new TextWatcher() {
                             break;
 
                     }
+
+
                     itemNameEditTextToHashMap();
 
                     addOrder(orderDateString,deliveryDateString,customerName,isHandWork,itemsToOrder);
@@ -442,15 +316,17 @@ orderNoEditText.addTextChangedListener(new TextWatcher() {
 
 
 
-        cancel_fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
 
 
         }
+
+    private String getOrderNo() {
+        Intent intent=getIntent();
+        Toast.makeText(this, orderNo=intent.getStringExtra("orderNo"), Toast.LENGTH_SHORT).show();
+       return orderNo=intent.getStringExtra("orderNo");
+
+    }
+
 
     private void resetRadioButton() {
         if(handWorkOn.isChecked())
@@ -496,23 +372,34 @@ orderNoEditText.addTextChangedListener(new TextWatcher() {
         });
     }
 
-    private void addItemNotInSuggestion(String itemName)
-    {
-        addItemButton.setText("Add " +itemName);
-        itemNotFoundLayout.setVisibility(View.VISIBLE);
-    }
-    private void addOrder(String orderDateString, String deliveryDateString, String customerName,Boolean isHandWork,HashMap<String, Boolean> items) {
-        order order=new order(orderDateString,deliveryDateString,customerName,isHandWork,items);
-        String orderNoString=Integer.toString(getOrderNo());
-        databaseOrders.child(getCurrentUserToString()).child(orderNoString).setValue(order);
-        databaseDeliveryDates.child(orderDateString.replace("/","")).child(orderNoString).setValue(true);
+
+    private void addOrder(String orderDateString, String deliveryDateString,
+                          String customerName,Boolean isHandWork,HashMap<String, String> items) {
+
+        order order=new order(currentUser+deliveryDateString,currentUser,
+                orderDateString,deliveryDateString,customerName,isHandWork,items,
+                false);
+        databaseOrders.child(getOrderNo()).setValue(order);
+        //Adding order under orders child.
+        common.incrementNoOfOrder("totalOrder");
+        //Increment Total order
         addItemsToDatabase();
+        //Add items under items child
+
 
 
     }
-    private void addItemsToDatabase(){
+
+
+    //1. Inserting values to items tree
+    //2. items is hashmap
+    private void addItemsToDatabase()
+    {
+
 
         databaseItems.setValue(items);
+
+
 
     }
 
@@ -522,48 +409,17 @@ orderNoEditText.addTextChangedListener(new TextWatcher() {
            customerName=customerNameEditText.getText().toString().toLowerCase().trim();
           return customerName;
         }
-        public int getOrderNo()
-        {
-            String value = orderNoEditText.getText().toString();
-            if (value.isEmpty())
-            {
-                return orderno=0;
-            }
-            else {
-                orderno = Integer.parseInt(value);
 
-                return orderno;
-            }
-
-        }
         public String getItemName(){
             String ItemName;
             int ItemNameLength=itemNameEditText.getTokenValues().toString().length();
             ItemName= itemNameEditText.getTokenValues().toString().substring(1,ItemNameLength-1).toLowerCase().trim();
             return ItemName;}
-//
-
-//             else
-//             {
-//                 itemNameEditText.setText("");
-//                 ItemName= itemNameEditText.getText().toString().toLowerCase().trim();
-//                 return ItemName;
-//             }
-             //1.
 
 
 
-        public String orderDateToString()
-        {
-            String orderDateString = Integer.toString(orderDate) + Integer.toString(orderMonth) + Integer.toString(orderYear);
-            return orderDateString;
-        }
-    public String delDateToString()
-    {
-        String delDateString = Integer.toString(delDate) + Integer.toString(delMonth) + Integer.toString(delYear).trim();
 
-        return delDateString;
-    }
+
 
 
     public void progressBarOn () {
@@ -585,25 +441,18 @@ orderNoEditText.addTextChangedListener(new TextWatcher() {
 
         }
         public void dataReset() {
-//            orderDate = 0;
-//            orderMonth = 0;
-//            orderYear = 0;
-//            delDate = 0;
-//            delMonth = 0;
-//            delYear = 0;
+
             setTodayDate();
             delDateText.setText("");
-
-            orderNoEditText.clearFocus();
-            orderNoEditText.setText("");
+            iSFetchAllItems=true;
 
             customerNameEditText.clearFocus();
             customerNameEditText.setText("");
 
             itemNameEditText.clearFocus();
             itemNameEditText.setText("");
-                resetItemSuggestion();
-                items.clear();
+            resetItemSuggestion();
+            items.clear();
 
                 stringChipList.clear();
 
@@ -613,34 +462,22 @@ orderNoEditText.addTextChangedListener(new TextWatcher() {
             setHandWorkLayoutVisibility(GONE);
             setAddOrderTextViewVisibility(VISIBILE);
             backButtonVisibility(VISIBILE);
-            Toast.makeText(this, "Data Resetted", Toast.LENGTH_SHORT).show();
+            fetchAllItems();
+
 
 
         }
 
         public void setTodayDate ()
         {
-//            orderDate = todayDate;
-//            orderMonth = todayMonth;
-//            orderYear = todayYear;
             Calendar calendar = Calendar.getInstance();
             orderDateString= dateToString(calendar.getTime());
             orderDateText.setText(orderDateString);
         }
-        public void selectedOrderDate ()
-        {
 
-            orderDateText.setText(orderDate + "/" + orderMonth + "/" + orderYear);
-
-        }
-        public void delDateDefault ()
-        {
-            delDateText.setText(R.string.pick);
-        }
         public boolean validation() {
-        return !orderDateString.isEmpty() && !deliveryDateString.equals("1") && !customerName.isEmpty() && orderno>0 &&!itemNameEditText.getAllChips().isEmpty();
+        return !deliveryDateString.equals("1") && !customerName.isEmpty()  && !itemNameEditText.getAllChips().isEmpty();
 
-            //1.orderdate must be contain
             //2.delivery date must be contain and must be future date.
             //3.orderno must be number and no in database - primary key
             //4.cutsomer name must be conatin
@@ -649,11 +486,7 @@ orderNoEditText.addTextChangedListener(new TextWatcher() {
 
 
         }
-        public void toMainActivity()
-        {
-            Intent MainActivity=new Intent(getApplicationContext(),MainActivity.class);
-            startActivity(MainActivity);
-        }
+
         public void setHandWorkLayoutVisibility(int visibility)
         {
             handWorkLayout.setVisibility(visibility);
@@ -670,7 +503,9 @@ orderNoEditText.addTextChangedListener(new TextWatcher() {
         }
 
 
+        //This function bottom up the calenderView
         public void openBottonCalender(Boolean isOrderDateCardSelected) {
+        //If user clicks on orderDateCard
             if (isOrderDateCardSelected) {
                 new DoubleDateAndTimePickerDialog.Builder(this)
 
@@ -712,6 +547,7 @@ orderNoEditText.addTextChangedListener(new TextWatcher() {
                 keyBoardUp();
 
             }
+            //DELIVERY DATE CARD
             else
             {
                 new SingleDateAndTimePickerDialog.Builder(this)
@@ -757,7 +593,6 @@ orderNoEditText.addTextChangedListener(new TextWatcher() {
             SimpleDateFormat dateFormat=new SimpleDateFormat(DATE_FORMAT, Locale.US);
             dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
             String dateToString=dateFormat.format(selectedDate);
-            Toast.makeText(this, dateToString, Toast.LENGTH_SHORT).show();
             return dateToString;
         }
         public void setPickDelDateTextViewVisibility(int Visibility)
@@ -765,35 +600,80 @@ orderNoEditText.addTextChangedListener(new TextWatcher() {
             pickDelDateText.setVisibility(Visibility);
         }
 
+
+        //getting value from edit text to items hashmap
         public void itemNameEditTextToHashMap()
         {
+            int i=1;
+
             for (com.hootsuite.nachos.chip.Chip chip:itemNameEditText.getAllChips())
             {
                 CharSequence text=chip.getText();
-                items.put(text.toString().replaceAll("\\s","").toLowerCase(),text.toString());
-                itemsToOrder.put(text.toString().replaceAll("\\s","").toLowerCase(),true);
+                String itemKey=text.toString().replaceAll("\\s","").toLowerCase();
+                String itemName=text.toString().toLowerCase();
+                items.put(itemKey,itemName);
+                itemsToOrder.put("item"+i,itemKey);
+                i++;
 
             }
+        }
+        public Boolean fetchAllItems()
+        {
+
+            databaseItems.addChildEventListener(new ChildEventListener() {
+                @Override
+                public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                    String itemKey = dataSnapshot.getKey();
+                    String itemName = (String) dataSnapshot.getValue();
+                    if (!items.containsKey(itemKey))
+                    items.put(itemKey,itemName);
+
+
+                }
+
+                @Override
+                public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                }
+
+                @Override
+                public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+
+                }
+
+                @Override
+                public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+            return true;
         }
         public void setItemsSuggestionList(String itemName)
 
         {
-            Query queryRef=databaseItems.startAt(itemName).endAt(itemName+"\uf8ff");
+
             databaseItems.startAt(itemName).endAt(itemName+"\uf8ff").limitToFirst(3).orderByKey().addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
                     for (DataSnapshot ds: dataSnapshot.getChildren())
                     {
 
                         try {
                             String itemKey=ds.getKey();
-                            String itemName = ds.getValue().toString();
+                            String itemName =  ds.getValue().toString();
 
                             if (!itemsSuggestionList.containsKey(itemKey)) {
                                 addChips(itemName);
                             }
                             itemsSuggestionList.put(itemKey,itemName);
+
 
                         }
                         catch (NullPointerException e)
@@ -838,14 +718,13 @@ orderNoEditText.addTextChangedListener(new TextWatcher() {
          {
              radioGroup.clearCheck();
          }
-         public  String getCurrentUserToString()
-         {
-           return   mAuth.getCurrentUser().getUid();
-         }
+
 
     public void setItemSuggestionChipGroupVisibility(int Visibility) {
         itemSuggestionChipGroup.setVisibility(Visibility);
     }
+
+
 
 
 

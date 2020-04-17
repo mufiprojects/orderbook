@@ -17,7 +17,7 @@
   <color name="hintTextColor">#9E9E9E</color>
     <color name="radioButton">#F17FE9</color>
   <color name="chipColor">#E0B9F3</color>
-
+  <color name="workCompleteBackgrounColor">#F15E6D</color>
 
 
 </resources>

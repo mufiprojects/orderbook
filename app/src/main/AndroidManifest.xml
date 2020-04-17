@@ -21,8 +21,8 @@
         <activity android:name="com.example.android.saffronfromzr.OrderActivity">
         </activity>
         <activity android:name="com.example.android.saffronfromzr.orderDetailsActivity"></activity>
-        <activity android:name=".MainActivity"></activity>
-        <receiver android:name="com.example.android.saffronfromzr.Notification_reciever"/>
+        <activity android:name=".MainActivity"
+            ></activity>
     </application>
 
 </manifest>

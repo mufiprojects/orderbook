@@ -4,12 +4,11 @@
     <string name="spaceBetweenDate">/</string>
     <string name="username">Me</string>
     <string name="allusers">All</string>
-    <string name="orderdetails">50 out of 100</string>
     <string name="workCompleteText">Work Complete ? </string>
     <string name="backButtonText">Back</string>
     <string name="handWork">Hand Work</string>
     <string name="completed">Completed</string>
-    <string name="addorder">Add Order</string>
+    <string name="addorder">Add %1$s </string>
     <string name="no">X</string>
     <string name="orderDate">ORDER DATE</string>
     <string name="delDate">DELIVERY DATE</string>
@@ -19,8 +18,16 @@
     <string name="addText">Add</string>
     <string name="itemNotFound">Item Not Found</string>
     <string name="items">Items</string>
-    <string name="name">Enter Your Name</string>
+    <string name="name">Enter Your First Name</string>
     <string name="tapSingnInButton">and tap sign in.</string>
     <string name="hiDesigner">Hi Designer</string>
     <string name="Outof">Out Of</string>
+    <string name="remainItems">+%1$s items</string>
+    <string name="itemCount">%1$s items</string>
+    <string name="orderDateOnDetails">Order date %1$s</string>
+    <string name="deliveryDateOnDetails">Delivery date %1$s</string>
+    <string name="orderTakenBy">Order taken by %1$s</string>
+    <string name="tabBelow">%1$s out of %2$s completed</string>
+
+
 </resources>

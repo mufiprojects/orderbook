@@ -1,6 +1,8 @@
 package com.example.android.saffronfromzr;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,15 +10,23 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
+
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.firebase.ui.database.SnapshotParser;
 import com.google.firebase.auth.FirebaseAuth;
+
 import com.google.firebase.database.DataSnapshot;
+
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+
+
+
+import java.util.HashMap;
+
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -24,13 +34,28 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import static androidx.constraintlayout.widget.Constraints.TAG;
+import static com.example.android.saffronfromzr.MainActivity.deliveryDate;
+
 public class me_fragment extends Fragment {
+
+    //XML
     private RecyclerView recyclerView;
-    private LinearLayoutManager linearLayoutManager;
-    private FirebaseRecyclerAdapter adapter;
     private ProgressBar progressBar;
 
 
+    //OTHER
+    private FirebaseRecyclerAdapter adapter;
+
+    //VARIABLES
+    private long itemCount;
+
+
+    //OBJECTS
+   private common common=new common();
+
+
+   //CONSTRUCTOR
     public me_fragment() {
 
     }
@@ -42,20 +67,33 @@ public class me_fragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.me_fragment, container, false);
+
+
         progressBar=view.findViewById(R.id.progressBar);
-        setProgressBarOn();
         recyclerView = view.findViewById(R.id.orderListRecyclerView);
-        linearLayoutManager = new LinearLayoutManager(getContext());
+
+        LinearLayoutManager linearLayoutManager;
+        linearLayoutManager = new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,
+                false);
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setHasFixedSize(true);
+
+
+        setProgressBarOn();
+        //Fetch data from Fire base and add to Fire base RecyclerAdapter
         fetch();
+
         return view;
     }
 
+    //Fetch data from Fire base and add to Fire base RecyclerAdapter
     private void fetch() {
-        String uid= FirebaseAuth.getInstance().getCurrentUser().getUid();
-        Query query = FirebaseDatabase.getInstance().
-                getReference("orders").child(uid);
+
+
+            String uid = common.getCurrentUser();
+            Query query = FirebaseDatabase.getInstance().
+                getReference("orders").orderByChild("designerId_deliveryDate").
+                    equalTo(uid+deliveryDate);
 
         FirebaseRecyclerOptions<orderbook> options =
                 new FirebaseRecyclerOptions.Builder<orderbook>()
@@ -66,28 +104,67 @@ public class me_fragment extends Fragment {
                             public orderbook parseSnapshot(@NonNull DataSnapshot snapshot) {
 
                                 String orderNo=snapshot.getKey();
+                                Boolean isWorkComplete=(Boolean) snapshot.child("workComplete").
 
+                                        getValue();
+                                String designerId=(String) snapshot.child("designerId").getValue();
                                 String customerName=(String) snapshot.child("customerName")
                                         .getValue();
-
                                 Boolean isHandWork=(Boolean) snapshot.child("handWork").getValue();
                                 String orderDate=(String) snapshot.child("orderDate").getValue();
+
+                                itemCount=snapshot.child("items").getChildrenCount();
+                                String item1=(String) snapshot.child("items").child("item1")
+                                        .getValue();
+
                                 setProgressBarOff();
-                                return new orderbook(orderNo,customerName,orderDate,isHandWork);
+
+                                if (itemCount==2)
+                                {
+                                  String item2=(String)snapshot.child("items").child("item2").
+                                          getValue();
+
+
+                                    return new orderbook(orderNo,designerId,isWorkComplete,
+                                            customerName,orderDate,isHandWork,2,item1,
+                                            item2);
+                                }
+                                else if (itemCount>=3)
+                                {
+                                    String item2=(String) snapshot.child("items").child("item2")
+                                            .getValue();
+
+                                  String item3=(String) snapshot.child("items").child("item3")
+                                          .getValue();
+
+                                    return new orderbook(orderNo,designerId,isWorkComplete,
+                                            customerName,orderDate,isHandWork,itemCount,
+                                            item1,item2,item3);
+
+                                }
+
+
+                                return new orderbook(orderNo,designerId,isWorkComplete,
+                                        customerName,orderDate,isHandWork,1,item1);
 
                             }
                         }).build();
         adapter = new FirebaseRecyclerAdapter<orderbook, ViewHolder>(options) {
             @Override
-            protected void onBindViewHolder(@NonNull ViewHolder viewHolder, int i,
-                                            @NonNull orderbook orderbook) {
-                viewHolder.setCustomerName(orderbook.getCustomerName());
+            protected void onBindViewHolder(@NonNull final ViewHolder viewHolder, int i,
+                                            @NonNull final orderbook orderbook) {
+                String cardNo=Integer.toString(i+1);
+                viewHolder.cardNo.setText(cardNo);
+                viewHolder.setCustomerName(common.makeFirstLetterCap(orderbook.getCustomerName()));
                 viewHolder.setOrderNo(orderbook.getOrderNo());
                 viewHolder.setOrderDate(orderbook.getOrderDateString());
-                viewHolder.designerNameLayout.setVisibility(View.INVISIBLE);
-                
 
-                if (orderbook.isHandWork)
+                if (orderbook.getIsWorkComplete())
+                {
+                    viewHolder.showWorkCompleteTab();
+                }
+
+                if (orderbook.getIsHandWork())
                 {
                     viewHolder.setHandWorkOnImageView();
                 }
@@ -95,6 +172,24 @@ public class me_fragment extends Fragment {
                 {
                     viewHolder.setHandWorkOffImageView();
                 }
+                viewHolder.itemNo1TextView.setText("1");
+                viewHolder.item1TextView.setText(common.makeFirstLetterCap
+                        (common.items.get(orderbook.getItem1())));
+                if (itemCount>1)
+                {
+                    viewHolder.showItemsTextView(itemCount,orderbook);
+                }
+
+                viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        toOrderDetailsActivity(orderbook);
+                    }
+                });
+
+
+
+
 
             }
 
@@ -112,12 +207,21 @@ public class me_fragment extends Fragment {
         recyclerView.setAdapter(adapter);
 
     }
-    public void setProgressBarOn()
+    //Moving to orderDetailsActivity by intent
+    private void toOrderDetailsActivity(orderbook orderbook) {
+        Intent orderDetailsActivity = new Intent(getContext(), orderDetailsActivity.class);
+        common.putExtra(orderDetailsActivity,orderbook);
+        startActivity(orderDetailsActivity);
+    }
+
+
+
+    private void setProgressBarOn()
     {
         progressBar.setVisibility(View.VISIBLE);
     }
 
-    public void setProgressBarOff(){
+    private void setProgressBarOff(){
         progressBar.setVisibility(View.GONE);
     }
 
@@ -134,41 +238,84 @@ public class me_fragment extends Fragment {
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        public  TextView cardNo;
-        public TextView customerName;
-        public  TextView orderNo;
-        public TextView orderDate;
-        public  ImageView handWorkOnImageView;
-        public  ImageView handWorkOffImageView;
-        public  LinearLayout designerNameLayout;
+        private TextView cardNo;
+        private TextView customerName;
+        private TextView orderNo;
+        private TextView orderDate;
+        private TextView itemNo3TextView;
+        private TextView item3TextView;
+        private TextView noOfMoreItems;
+        private TextView itemNo1TextView;
+        private TextView item1TextView;
+        private TextView itemNo2TextView;
+        private TextView item2TextView;
 
-        public ViewHolder(View itemView) {
+
+        private ImageView handWorkOnImageView;
+        private ImageView handWorkOffImageView;
+
+        private LinearLayout designerNameLayout;
+        private LinearLayout orderCompletedLayout;
+        private LinearLayout item1Layout;
+
+        private LinearLayout item2Layout;
+
+        private LinearLayout item3Layout;
+
+        private ViewHolder(View itemView) {
             super(itemView);
             cardNo=itemView.findViewById(R.id.cardNo);
             customerName = itemView.findViewById(R.id.customerNameOnCard);
             orderNo=itemView.findViewById(R.id.orderNoOnCard);
             orderDate=itemView.findViewById(R.id.orderDateOnCard);
+
             handWorkOnImageView=itemView.findViewById(R.id.handWorkOnImageView);
             handWorkOffImageView=itemView.findViewById(R.id.handWorkOffImageView);
+
             designerNameLayout=itemView.findViewById(R.id.designerNameLayout);
+
+            orderCompletedLayout=itemView.findViewById(R.id.orderCompletedLayout);
+
+            item1Layout=itemView.findViewById(R.id.item1Layout);
+            itemNo1TextView=itemView.findViewById(R.id.itemNo1TextView);
+            item1TextView=itemView.findViewById(R.id.item1TextView);
+
+            item2Layout=itemView.findViewById(R.id.item2Layout);
+            itemNo2TextView=itemView.findViewById(R.id.itemNo2TextView);
+            item2TextView=itemView.findViewById(R.id.item2TextView);
+
+            item3Layout=itemView.findViewById(R.id.item3Layout);
+            itemNo3TextView=itemView.findViewById(R.id.itemNo3TextView);
+            item3TextView=itemView.findViewById(R.id.item3TextView);
+            noOfMoreItems=itemView.findViewById(R.id.noOfMoreItems);
+
+
+
 
 
         }
+        //this function makes workCompleteTab in listItem of cardView visible
+        private   void showWorkCompleteTab()
+        {
 
-        public void setCustomerName(String customerName) {
+            orderCompletedLayout.setVisibility(View.VISIBLE);
+
+        }
+
+        private void setCustomerName(String customerName) {
             this.customerName.setText(customerName);
 
         }
-        public void setOrderNo(String orderNo){
+        private void setOrderNo(String orderNo){
             this.orderNo.setText(orderNo);
         }
 
-        public void setHandWorkOnImageView() {
+        private void setHandWorkOnImageView() {
             handWorkOffImageView.setVisibility(View.GONE);
             this.handWorkOnImageView.setVisibility(View.VISIBLE);
         }
 
-        public void setHandWorkOffImageView() {
+        private void setHandWorkOffImageView() {
             handWorkOnImageView.setVisibility(View.GONE);
             handWorkOffImageView.setVisibility(View.VISIBLE);
 
@@ -178,9 +325,52 @@ public class me_fragment extends Fragment {
             this.orderDate.setText(orderDate);
         }
 
-        public void setCardNo(int cardNo) {
-            this.cardNo.setText(cardNo);
+        private void showItemsTextView(long noOfItems,orderbook orderbook)
+        {
+
+            if (noOfItems==2)
+            {
+
+
+                item2TextView.setText(common.makeFirstLetterCap(common.items.
+                        get(orderbook.getItem2())));
+                itemNo2TextView.setText("2");
+                item2Layout.setVisibility(View.VISIBLE);
+
+            }
+            else if (noOfItems>2)
+            {
+                item2TextView.setText(common.makeFirstLetterCap(common.items.
+                        get(orderbook.getItem2())));
+                itemNo2TextView.setText("2");
+                item2Layout.setVisibility(View.VISIBLE);
+
+
+
+
+                item3TextView.setText(common.makeFirstLetterCap(common.items.
+                        get(orderbook.getItem3())));
+                itemNo3TextView.setText("3");
+                item3Layout.setVisibility(View.VISIBLE);
+
+
+
+
+                if (noOfItems>3)
+                {
+
+                    String remainItems=Long.toString(noOfItems-3);
+                    Log.d(TAG, "remainItems: "+remainItems);
+                    noOfMoreItems.setVisibility(View.VISIBLE);
+                    noOfMoreItems.setText(getString(R.string.remainItems,remainItems));
+
+
+                }
+            }
+
         }
+
     }
+
 
 }

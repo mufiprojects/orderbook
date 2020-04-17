@@ -32,7 +32,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:gravity="center_horizontal"
-        android:text="50 out of 100 Completed"
         android:textColor="#B169D4"
         android:textSize="12sp"
         android:textStyle="bold"
