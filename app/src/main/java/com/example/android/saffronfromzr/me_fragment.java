@@ -10,41 +10,29 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
-
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.firebase.ui.database.SnapshotParser;
-import com.google.firebase.auth.FirebaseAuth;
-
 import com.google.firebase.database.DataSnapshot;
-
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
-
-
-
-import java.util.HashMap;
-
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import static androidx.constraintlayout.widget.Constraints.TAG;
 import static com.example.android.saffronfromzr.MainActivity.deliveryDate;
+import static com.example.android.saffronfromzr.common.currentUser;
+import static com.example.android.saffronfromzr.common.items;
 
-public class me_fragment extends Fragment {
+public class me_fragment extends Fragment  {
 
     //XML
     private RecyclerView recyclerView;
     private ProgressBar progressBar;
 
-
-    //OTHER
+    //Firebase objects
     private FirebaseRecyclerAdapter adapter;
 
     //VARIABLES
@@ -62,38 +50,35 @@ public class me_fragment extends Fragment {
 
 
 
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.me_fragment, container, false);
 
-
-        progressBar=view.findViewById(R.id.progressBar);
+        progressBar = view.findViewById(R.id.progressBar);
         recyclerView = view.findViewById(R.id.orderListRecyclerView);
 
+        setProgressBarOn();
+        //SETTING PROGRESS BAR ON BEFORE fetchData()
         LinearLayoutManager linearLayoutManager;
-        linearLayoutManager = new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,
+        linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL,
                 false);
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setHasFixedSize(true);
 
-
-        setProgressBarOn();
-        //Fetch data from Fire base and add to Fire base RecyclerAdapter
         fetch();
+        //1.fetchData(), fetch all orders ie. selected delivery date orders
 
         return view;
-    }
 
+    }
     //Fetch data from Fire base and add to Fire base RecyclerAdapter
     private void fetch() {
-
-
-            String uid = common.getCurrentUser();
             Query query = FirebaseDatabase.getInstance().
                 getReference("orders").orderByChild("designerId_deliveryDate").
-                    equalTo(uid+deliveryDate);
+                    equalTo(currentUser+deliveryDate);
 
         FirebaseRecyclerOptions<orderbook> options =
                 new FirebaseRecyclerOptions.Builder<orderbook>()
@@ -149,12 +134,13 @@ public class me_fragment extends Fragment {
 
                             }
                         }).build();
-        adapter = new FirebaseRecyclerAdapter<orderbook, ViewHolder>(options) {
+
+
+        adapter = new FirebaseRecyclerAdapter<orderbook,ViewHolder>(options) {
             @Override
             protected void onBindViewHolder(@NonNull final ViewHolder viewHolder, int i,
                                             @NonNull final orderbook orderbook) {
-                String cardNo=Integer.toString(i+1);
-                viewHolder.cardNo.setText(cardNo);
+                viewHolder.cardNo.setText(getString(R.string.numValue,i+1));
                 viewHolder.setCustomerName(common.makeFirstLetterCap(orderbook.getCustomerName()));
                 viewHolder.setOrderNo(orderbook.getOrderNo());
                 viewHolder.setOrderDate(orderbook.getOrderDateString());
@@ -172,9 +158,9 @@ public class me_fragment extends Fragment {
                 {
                     viewHolder.setHandWorkOffImageView();
                 }
-                viewHolder.itemNo1TextView.setText("1");
+
                 viewHolder.item1TextView.setText(common.makeFirstLetterCap
-                        (common.items.get(orderbook.getItem1())));
+                        (items.get(orderbook.getItem1())));
                 if (itemCount>1)
                 {
                     viewHolder.showItemsTextView(itemCount,orderbook);
@@ -207,49 +193,16 @@ public class me_fragment extends Fragment {
         recyclerView.setAdapter(adapter);
 
     }
-    //Moving to orderDetailsActivity by intent
-    private void toOrderDetailsActivity(orderbook orderbook) {
-        Intent orderDetailsActivity = new Intent(getContext(), orderDetailsActivity.class);
-        common.putExtra(orderDetailsActivity,orderbook);
-        startActivity(orderDetailsActivity);
-    }
-
-
-
-    private void setProgressBarOn()
-    {
-        progressBar.setVisibility(View.VISIBLE);
-    }
-
-    private void setProgressBarOff(){
-        progressBar.setVisibility(View.GONE);
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        adapter.startListening();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        adapter.stopListening();
-    }
-
     public class ViewHolder extends RecyclerView.ViewHolder {
         private TextView cardNo;
         private TextView customerName;
         private TextView orderNo;
         private TextView orderDate;
-        private TextView itemNo3TextView;
+
+        private TextView item1TextView;
+        private TextView item2TextView;
         private TextView item3TextView;
         private TextView noOfMoreItems;
-        private TextView itemNo1TextView;
-        private TextView item1TextView;
-        private TextView itemNo2TextView;
-        private TextView item2TextView;
-
 
         private ImageView handWorkOnImageView;
         private ImageView handWorkOffImageView;
@@ -257,7 +210,6 @@ public class me_fragment extends Fragment {
         private LinearLayout designerNameLayout;
         private LinearLayout orderCompletedLayout;
         private LinearLayout item1Layout;
-
         private LinearLayout item2Layout;
 
         private LinearLayout item3Layout;
@@ -277,15 +229,15 @@ public class me_fragment extends Fragment {
             orderCompletedLayout=itemView.findViewById(R.id.orderCompletedLayout);
 
             item1Layout=itemView.findViewById(R.id.item1Layout);
-            itemNo1TextView=itemView.findViewById(R.id.itemNo1TextView);
+
             item1TextView=itemView.findViewById(R.id.item1TextView);
 
             item2Layout=itemView.findViewById(R.id.item2Layout);
-            itemNo2TextView=itemView.findViewById(R.id.itemNo2TextView);
+
             item2TextView=itemView.findViewById(R.id.item2TextView);
 
             item3Layout=itemView.findViewById(R.id.item3Layout);
-            itemNo3TextView=itemView.findViewById(R.id.itemNo3TextView);
+
             item3TextView=itemView.findViewById(R.id.item3TextView);
             noOfMoreItems=itemView.findViewById(R.id.noOfMoreItems);
 
@@ -332,25 +284,25 @@ public class me_fragment extends Fragment {
             {
 
 
-                item2TextView.setText(common.makeFirstLetterCap(common.items.
+                item2TextView.setText(common.makeFirstLetterCap(items.
                         get(orderbook.getItem2())));
-                itemNo2TextView.setText("2");
+
                 item2Layout.setVisibility(View.VISIBLE);
 
             }
             else if (noOfItems>2)
             {
-                item2TextView.setText(common.makeFirstLetterCap(common.items.
+                item2TextView.setText(common.makeFirstLetterCap(items.
                         get(orderbook.getItem2())));
-                itemNo2TextView.setText("2");
+
                 item2Layout.setVisibility(View.VISIBLE);
 
 
 
 
-                item3TextView.setText(common.makeFirstLetterCap(common.items.
+                item3TextView.setText(common.makeFirstLetterCap(items.
                         get(orderbook.getItem3())));
-                itemNo3TextView.setText("3");
+
                 item3Layout.setVisibility(View.VISIBLE);
 
 
@@ -371,6 +323,35 @@ public class me_fragment extends Fragment {
         }
 
     }
+    @Override
+    public void onStart() {
+        super.onStart();
+        adapter.startListening();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        adapter.stopListening();
+    }
+
+    private void setProgressBarOn()
+    {
+        progressBar.setVisibility(View.VISIBLE);
+    }
+
+    private void setProgressBarOff(){
+        progressBar.setVisibility(View.GONE);
+    }
+
+    //Moving to orderDetailsActivity by intent
+    private void toOrderDetailsActivity(orderbook orderbook) {
+        Intent orderDetailsActivity = new Intent(getContext(), orderDetailsActivity.class);
+        common.putExtra(orderDetailsActivity,orderbook);
+        startActivity(orderDetailsActivity);
+    }
+
+
 
 
 }

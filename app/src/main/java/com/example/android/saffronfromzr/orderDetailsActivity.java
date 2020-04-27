@@ -38,14 +38,14 @@ public class orderDetailsActivity extends AppCompatActivity {
     TextView deliveryDateView;
     TextView customerNameView;
     TextView itemsCountView;
-    TextView designerNameView;
 
-    RelativeLayout workCompleteLayout;
+    RelativeLayout workCompleteLayout; // Bind this local
 
     ImageView handWorkOnImageView;
     ImageView handWorkOffImageView;
 
-    MaterialButton workCompleteButton;
+    MaterialButton workCompleteButton; // bind this local
+    MaterialButton backBtn;
 
     ListView itemsListView;
     long itemsCount;
@@ -55,7 +55,7 @@ public class orderDetailsActivity extends AppCompatActivity {
 
 
     common common=new common();
-    private boolean workComplete;
+    private boolean workComplete; // make it local variable
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -72,17 +72,28 @@ public class orderDetailsActivity extends AppCompatActivity {
 
         databaseOrders=database.getReference("orders");
 
-        Log.d("orderDetailsTest","designerId "+designerId);
-
+        common.fetchNoOfTotalCompletedOrders();
+        common.fetchUserNoOfCompletedOrders();
 
         getData();
 
         setDataWithView();
 
+        setUpBackBtn();
+
 
 
     }
-
+    public void setUpBackBtn()
+    {
+        backBtn=findViewById(R.id.backButton);
+        backBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                orderDetailsActivity.super.finish();
+            }
+        });
+    }
     public  void getData()
     {
         Intent intent=getIntent();
@@ -106,16 +117,20 @@ public class orderDetailsActivity extends AppCompatActivity {
             Log.d("exception","orderDetailsActivity line 69",e);
         }
 
-        setItemsList(intent.getStringExtra("item1"));
+        setItemsList(common.makeFirstLetterCap(common.items.get(intent.getStringExtra("item1"))));
 
         if (itemsCount==2)
         {
-            setItemsList(intent.getStringExtra("item2"));
+            setItemsList(common.makeFirstLetterCap(common.items.get(intent.getStringExtra("item2"))));
         }
         else if(itemsCount>2)
         {
-            setItemsList(intent.getStringExtra("item2"));
-            setItemsList(intent.getStringExtra("item3"));
+            setItemsList(common.makeFirstLetterCap(common.items.get(intent.
+                    getStringExtra("item2"))));
+
+            setItemsList(common.makeFirstLetterCap(common.items.get(intent.
+                    getStringExtra("item3"))));
+
             if (itemsCount>3)
             {
                 fetchItemsFromDatabase();
@@ -142,12 +157,9 @@ public class orderDetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 databaseOrders.child(orderNo).child("workComplete").setValue(true);
-                common.fetchNoOfTotalCompletedOrders();
-                common.fetchUserNoOfCompletedOrders();
-                if (common.getNoOfOrdersInAll()!=0 && common.getNoOfOrdersInUser()!=0)
-                {
-                    common.incrementNoOfOrder("completedOrder");
-                }
+
+                common.incrementNoOfOrder("completedOrder");
+
                 workCompleteButton.setVisibility(View.INVISIBLE);
                 showWorkCompleteTab();
             }
@@ -165,20 +177,15 @@ public class orderDetailsActivity extends AppCompatActivity {
     }
 
     private void showDesignerName() {
+        TextView designerNameView;
         designerNameView=findViewById(R.id.designerName);
         designerNameView.setVisibility(View.VISIBLE);
-        designerNameView.setText(getString(R.string.orderTakenBy,common.userHashMap.get(designerId)));
+        designerNameView.setText(getString(R.string.orderTakenBy,common.makeFirstLetterCap(common.userHashMap.get(designerId))));
 
-
-    }
-
-    private void hideWorkCompleteButton() {
 
     }
 
     private void fetchItemsFromDatabase() {
-
-
 
         databaseOrders.child(orderNo).child("items").limitToLast((int)itemsCount-3).orderByKey().
                 addChildEventListener(new ChildEventListener() {
@@ -218,9 +225,6 @@ public class orderDetailsActivity extends AppCompatActivity {
     private void fetchWorkComplete()
     {
 
-
-
-
         databaseOrders.child(orderNo).child("workComplete").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -255,14 +259,17 @@ public class orderDetailsActivity extends AppCompatActivity {
             }
         });
     }
+    private void hideWorkCompleteButton() {
+
+    }
 
     public void setDataWithView()
     {
         orderNoView.setText(orderNo);
-        customerNameView.setText(customerName);
+        customerNameView.setText(common.makeFirstLetterCap(customerName));
         orderDateView.setText(getString(R.string.orderDateOnDetails,orderDate));
         deliveryDateView.setText(getString(R.string.deliveryDateOnDetails,deliveryDate));
-        
+
         setAdapter();
 
         if (isHandWork)

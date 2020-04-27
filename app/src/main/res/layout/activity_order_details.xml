@@ -81,7 +81,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
-        android:layout_toEndOf="@id/orderNo"
+       android:layout_above="@id/orderDate"
         android:textSize="32sp"
         android:textColor="@color/white"
         android:text="AYSHA RAHMAN"
@@ -92,8 +92,7 @@
         android:id="@+id/handWorkCardLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/customerName"
-        android:gravity="end"
+        android:layout_below="@id/deliveryDateView"
         android:orientation="horizontal"
         >
         <TextView
@@ -158,37 +157,41 @@
         android:orientation="horizontal"
         android:layout_alignParentBottom="true"
         android:layout_margin="27dp"
+        android:gravity="end"
         >
         <TextView
             android:id="@+id/designerName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="invisible"
-            android:textSize="24sp"
+            android:layout_marginEnd="5dp"
+            android:visibility="visible"
+            app:autoSizeTextType="uniform"
             android:layout_gravity="center_vertical"
             />
-    <com.google.android.material.button.MaterialButton
-      android:id="@+id/workCompleteButton"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        android:layout_weight="2"
-        android:layout_marginEnd="5dp"
-        app:cornerRadius="18dp"
-        app:backgroundTint="@color/finishColor"
-        android:text="@string/workCompleteText"
-        android:textColor="@color/white"/>
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/backButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-         app:cornerRadius="18dp"
-        app:backgroundTint="@color/backButtonColor"
-        android:text="@string/backButtonText"
-        android:textColor="@color/white"
-        android:layout_gravity="end"
 
-        />
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/workCompleteButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="5dp"
+            android:layout_weight="2"
+            android:text="@string/workCompleteText"
+            android:textColor="@color/white"
+            android:visibility="gone"
+            app:backgroundTint="@color/finishColor"
+            app:cornerRadius="18dp" />
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/backButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/backButtonText"
+            android:textColor="@color/white"
+            app:backgroundTint="@color/backButtonColor"
+            app:cornerRadius="18dp"
+            android:foregroundGravity="left"
+            />
+
+
     </LinearLayout>
 
 </RelativeLayout>

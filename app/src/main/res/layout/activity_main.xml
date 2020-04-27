@@ -17,8 +17,9 @@
 
 
     <LinearLayout
-       android:layout_below="@id/tabs"
+
         android:id="@+id/datePickerTimelineLayout"
+        android:layout_below="@id/tabs"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="visible"
@@ -129,24 +130,27 @@
         android:id="@+id/viewPager"
         android:layout_below="@id/searchLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        />
 
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
 
-    android:id="@+id/fabBtn"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    app:backgroundTint="#F15E6D"
-    android:layout_alignParentBottom="true"
-    android:layout_centerInParent="true"
-    android:elevation="6dp"
-    android:layout_marginBottom="20dp"
-    android:src="@drawable/plus_icon"
-
-
+        android:id="@+id/fabBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="40dp"
+        app:backgroundTint="@color/white"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:elevation="6dp"
+        android:layout_marginBottom="60dp"
+        android:src="@drawable/searchadd"
+        app:fabSize="normal"
 
     />
+
+
 
 
 </RelativeLayout>

@@ -10,7 +10,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:712329726305:android:bc91c49cd0148b8bf19d20",
         "android_client_info": {
-          "package_name": "com.example.android.saffrondesigner"
+          "package_name": "com.example.android.saffromfromzr"
         }
       },
       "oauth_client": [
@@ -18,7 +18,7 @@
           "client_id": "712329726305-2rur9449pelj5p3fmqka8t885566devp.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.android.saffrondesigner",
+            "package_name": "com.example.android.saffronfromzr",
             "certificate_hash": "e1a05b6c5acb9ceff65ba98c9dfdd043d020ed21"
           }
         },

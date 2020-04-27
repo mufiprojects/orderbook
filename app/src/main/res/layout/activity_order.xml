@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:visibility="visible">
-
+m
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -49,17 +49,7 @@
                             android:layout_height="match_parent"
                             android:orientation="horizontal"
                             android:layout_alignParentEnd="true">
-                        <com.google.android.material.button.MaterialButton
-                            android:id="@+id/backButton"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginEnd="15dp"
-                            app:cornerRadius="18dp"
-                            app:backgroundTint="@color/backButtonColor"
-                            android:text="@string/backButtonText"
-                            android:textColor="@color/white"
-                            android:visibility="visible"
-                            />
+
                             <LinearLayout
                                 android:id="@+id/handWorkLayout"
                                 android:layout_width="wrap_content"

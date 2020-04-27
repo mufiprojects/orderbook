@@ -120,7 +120,7 @@ public class signInActivity  extends AppCompatActivity {
     }
 private void firebaseAuthWithGoogle(GoogleSignInAccount account)
 {
-    Toast.makeText(this, "firebaseAuthWithGoogle() executed", Toast.LENGTH_SHORT).show();
+
     Log.d("firebaseSignIn","firebaseAuthWithGoogle:"+account.getId());
     AuthCredential credential= GoogleAuthProvider.getCredential(account.getIdToken(),null);
     mAuth.signInWithCredential(credential)
@@ -129,16 +129,17 @@ private void firebaseAuthWithGoogle(GoogleSignInAccount account)
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if (task.isSuccessful()) {
 
-                        Log.d("firebasaeSignIn", "signInWithCrediential:success");
+
                         FirebaseUser user = mAuth.getCurrentUser();
-                        Toast.makeText(signInActivity.this, "User Signed In", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(signInActivity.this, "User Signed In",
+                                Toast.LENGTH_SHORT).show();
                         String currentUser=mAuth.getCurrentUser().getUid();
                         users.child(currentUser).child("name").setValue(getDesignerName());
                         startActivity(new Intent(getApplicationContext(),MainActivity.class));
 
 
                     } else {
-                        Log.d("firebasaeSignIn", "signInWithCrediential:failed", task.getException());
+
                         Toast.makeText(signInActivity.this, "Authentication Failed", Toast.LENGTH_SHORT).show();
 
                     }

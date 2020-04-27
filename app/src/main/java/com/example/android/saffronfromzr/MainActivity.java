@@ -1,8 +1,5 @@
 package com.example.android.saffronfromzr;
 
-
-
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -10,22 +7,15 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
-//import com.github.badoualy.datepicker.TimelineView;
-
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -34,7 +24,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.vivekkaushik.datepicker.DatePickerTimeline;
 import com.vivekkaushik.datepicker.OnDateSelectedListener;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -42,10 +31,8 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.TimeZone;
-import java.util.function.Function;
-import java.util.logging.Logger;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -53,12 +40,14 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
-
-import static android.media.CamcorderProfile.get;
 import static com.example.android.saffronfromzr.OrderActivity.DATE_FORMAT;
+import static com.example.android.saffronfromzr.common.hideKeyboard;
+import static com.example.android.saffronfromzr.common.items;
+import static com.example.android.saffronfromzr.common.userHashMap;
 
 public class MainActivity extends AppCompatActivity {
 
+    //XML
     FloatingActionButton addSearchBtn;
 
     TabLayout tabLayout;
@@ -70,15 +59,14 @@ public class MainActivity extends AppCompatActivity {
 
     DatePickerTimeline datePicker;
 
-
-    FirebaseAuth mAuth;
+    //FIREBASE OBJECTS
     FirebaseDatabase database=FirebaseDatabase.getInstance();
     DatabaseReference databaseItems;
     DatabaseReference databaseUsers;
 
     //Variables
     static String deliveryDate;
-    int viewPagerPosition;
+
     String searchOrderNo;
 
     //objects
@@ -89,86 +77,43 @@ public class MainActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        mAuth=FirebaseAuth.getInstance();
-        common.getCurrentUser();
-
-        fetchItems();
-        fetchUsers();
-        common.fetchNoOfUserTotalOrders();
-        common.fetchUserNoOfCompletedOrders();
-        common.fetchNoOfTotalOrders();
-        common.fetchNoOfTotalCompletedOrders();
-        createTabItems();
+        fetchUserState();
+        startService(new Intent(this,backgroundService.class));
         viewPager= findViewById(R.id.viewPager);
-        setupViewPager(viewPager);
-        tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(viewPager));
-        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-           @Override
-           public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-
-           }
-
-           @Override
-           public void onPageSelected(int position) {
-               if (position==0)
-               {
-                   try {
-                       tabLayout.getTabAt(0).select();
-                   }
-                   catch (NullPointerException n)
-                   {
-                       Log.d("exceptions","MainActivity line 101",n);
-                   }
-               }
-               else if (position==1)
-               {
-                   tabLayout.getTabAt(1).select();
-               }
-           }
-
-           @Override
-           public void onPageScrollStateChanged(int state) {
-
-           }
-       });
-        viewPagerPosition=viewPager.getCurrentItem();
         datePicker = findViewById(R.id.datePickerTimeline);
         addSearchBtn = findViewById(R.id.fabBtn);
-        addSearchBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                hideAddSarchBtn();
-                showSearchLayout();
-                goBtnListerner();
-                hideTab();
-                goneDatePicker();
-                hideViewPager();
 
-            }
-        });
+        common.getCurrentUser(); // FETCHING CURRENT USER
+        fetchItems();  // Fetching all items in items tree to items hash map
+        fetchUsers(); // Fetching all users in users tree to users hash map
+        createTabItems(); // create tabs
+        setupViewPager(viewPager);
+        addSearchBtnListener();//Listerner function when clicks on addsearch button
+
+
 
         final Calendar calendar = Calendar.getInstance();
-
         int day=calendar.get(Calendar.DATE);
         int month=calendar.get(Calendar.MONTH);
         int year=calendar.get(Calendar.YEAR);
-
         datePicker.setInitialDate(year,month,day);
+        //SET DATE PICKER INITIAL DATE AS SYSTEM DATE
         Date date=new GregorianCalendar(year,month,day+1).getTime();
         deliveryDate=dateToString(date);
+        // STATIC VARIABLE MAKE THIS TODAY DATE
         setupViewPager(viewPager);
         datePicker.setOnDateSelectedListener(new OnDateSelectedListener() {
             @Override
             public void onDateSelected(int year, int month, int day, int dayOfWeek) {
                 Date date=new GregorianCalendar(year,month,day+1).getTime();
                 deliveryDate=dateToString(date);
+                // STATIC VARIABLE MAKE THIS SELECTED  DATE
                 setupViewPager(viewPager);
             }
 
             @Override
-            public void onDisabledDateSelected(int year, int month, int day, int dayOfWeek, boolean isDisabled) {
+            public void onDisabledDateSelected(int year, int month, int day, int dayOfWeek,
+                                               boolean isDisabled) {
 
             }
         });
@@ -176,20 +121,46 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void goBtnListerner() {
+
+    private void addSearchBtnListener() {
+        addSearchBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                hideAddSearchBtn();
+                showSearchLayout();
+                goBtnListener();
+                hideTab();
+                goneDatePicker();
+                hideViewPager();
+
+            }
+        });
+    }
+
+    //THIS FUNCTION PERFORM GO FUNCTION
+    private void goBtnListener() {
         go_btn=findViewById(R.id.go_button);
         go_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 final String orderNo=getSearchOrderNo();
-                final DatabaseReference databaseOrders = FirebaseDatabase.getInstance().getReference("orders");
-               databaseOrders.child(orderNo).addListenerForSingleValueEvent(new ValueEventListener() {
+                final DatabaseReference databaseOrders = FirebaseDatabase.getInstance()
+                        .getReference("orders");
+                //CHECKING ORDER NER IS IN ORDERS TREE
+                //IF NO GO TO ORDER ACTIVITY
+                //ELSE GO TO ORDER DETAILS ACTIVITY WITH ALL THAT CHILDS
+               databaseOrders.child(orderNo).addListenerForSingleValueEvent(new ValueEventListener()
+               {
                    @Override
                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                        if (dataSnapshot.getValue() == null) {
-                           Intent orderActivity = new Intent(getApplicationContext(),OrderActivity.class);
+                           //ADD ORDER IF THERE NO SUCH ORDER IN ORDERS TREE
+                           Intent orderActivity = new Intent(getApplicationContext(),
+                                   OrderActivity.class);
                            orderActivity.putExtra("orderNo",getSearchOrderNo());
-                           Toast.makeText(MainActivity.this, getSearchOrderNo(), Toast.LENGTH_SHORT).show();
+                           Toast.makeText(MainActivity.this, getSearchOrderNo(),
+                                   Toast.LENGTH_SHORT).show();
                            startActivity(orderActivity);
                        } else {
                            String designerId = (String) dataSnapshot.child("designerId").getValue();
@@ -232,6 +203,8 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    //Listerner functions
+
 
     private void hideViewPager() {
         viewPager.setVisibility(View.INVISIBLE);
@@ -253,29 +226,22 @@ public class MainActivity extends AppCompatActivity {
         searchLayout.setVisibility(View.VISIBLE);
         searchText=findViewById(R.id.searchText);
         searchText.requestFocus();
-//        keyBoardUp();
         setGo_btn();
         setCancel_btn();
     }
 
-    private void hideAddSarchBtn() {
+    private void hideAddSearchBtn() {
         addSearchBtn.setVisibility(View.INVISIBLE);
     }
 
-    private void setupViewPager(ViewPager viewPager)
-    {
 
-        ViewPagerAdapter adapter=new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new me_fragment());
-        adapter.addFragment(new all_fragment());
-        viewPager.setAdapter(adapter);
-        setViewPagerWithTabPosition();
-    }
 
-    class ViewPagerAdapter extends FragmentPagerAdapter {
+    //VIEW PAGER FUNCTIONS
+    private class ViewPagerAdapter extends FragmentPagerAdapter {
         private final List<Fragment> mFragmentList = new ArrayList<>();
 
-        public ViewPagerAdapter(FragmentManager manager) {
+
+        private ViewPagerAdapter(FragmentManager manager) {
             super(manager);
         }
         public  Fragment getItem(int position)
@@ -288,12 +254,57 @@ public class MainActivity extends AppCompatActivity {
             return mFragmentList.size();
         }
 
-        public void addFragment(Fragment fragment) {
+        private void addFragment(Fragment fragment) {
             mFragmentList.add(fragment);
         }
 
     }
 
+    private void setupViewPager(ViewPager viewPager)
+    {
+
+        ViewPagerAdapter adapter=new ViewPagerAdapter(getSupportFragmentManager());
+        adapter.addFragment(new me_fragment());
+        adapter.addFragment(new all_fragment());
+        viewPager.setAdapter(adapter);
+        setViewPagerWithTabPosition();
+        setTabPositionWithViewPager();
+
+    }
+    //SETTING TAB POSITION CORRESPONDING WITH VIEW PAGER POSITION
+    private void setTabPositionWithViewPager() {
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                if (position==0)
+                {
+                    try {
+                        Objects.requireNonNull(tabLayout.getTabAt(0)).select();
+                    }
+                    catch (NullPointerException n)
+                    {
+                        Log.d("exceptions","MainActivity line 101",n);
+                    }
+                }
+                else if (position==1)
+                {
+                    Objects.requireNonNull(tabLayout.getTabAt(1)).select();
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
+    }
 
 
     private void setViewPagerWithTabPosition() {
@@ -305,76 +316,50 @@ public class MainActivity extends AppCompatActivity {
             viewPager.setCurrentItem(1);
         }
     }
+    //VIEW PAGER FUNCTIONS
 
-    public String dateToString(Date selectedDate)
-    {
-
-        SimpleDateFormat dateFormat=new SimpleDateFormat(DATE_FORMAT, Locale.US);
-        dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-        String dateToString=dateFormat.format(selectedDate);
-        Toast.makeText(this, dateToString, Toast.LENGTH_SHORT).show();
-        return dateToString;
-    }
-    public void toOrderActivity() {
-        Intent orderActivity = new Intent(getApplicationContext(), OrderActivity.class);
-        startActivity(orderActivity);
-    }
-    public void loadData(Date selectedDate)
-    {
-        all_fragment all_fragment=new all_fragment();
-        all_fragment.deliveryDate=dateToString(selectedDate);
-        Log.d("deliveryDate=",all_fragment.deliveryDate=dateToString(selectedDate));
-    }
-    public String todayDate()
-    {
-        Calendar calendar=Calendar.getInstance();
-        int date=calendar.get(Calendar.DATE);
-        int month=calendar.get(Calendar.MONTH)+1;
-        int year=calendar.get(Calendar.YEAR);
-     String todayDateString =Integer.toString(date).trim()+Integer.toString(month).trim()+Integer.toString(year).trim();
-     return todayDateString;
-
-
-    }
-//    public void notification()
-//    {
-//
-//       long systemTime=System.currentTimeMillis();
-//        Calendar calendar=Calendar.getInstance();
-//        calendar.set(Calendar.HOUR_OF_DAY,11);
-//        calendar.set(Calendar.MINUTE,10);
-//        calendar.set(Calendar.SECOND,0);
-//        Intent intent=new Intent(getApplicationContext(),Notification_reciever.class);
-//        PendingIntent pendingIntent=PendingIntent.getBroadcast(getApplicationContext(),100,intent,PendingIntent.FLAG_UPDATE_CURRENT);
-//        AlarmManager alarmManager=(AlarmManager) getSystemService(ALARM_SERVICE);
-//        if(systemTime <= calendar.getTimeInMillis())
-//        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),AlarmManager.INTERVAL_DAY,pendingIntent );
-//    }
 
 
 
     public void createTabItems() {
-
-
-
         tabLayout= findViewById(R.id.tabs);
-
-
-
-       View userTabView = LayoutInflater.from(this).inflate(R.layout.tabitem,null);
-        ImageView userImg=(ImageView)userTabView.findViewById(R.id.tabIcon);
+        //Setting tab1 item
+        View userTabView = LayoutInflater.from(this).inflate(R.layout.tabitem,null);
+        ImageView userImg= userTabView.findViewById(R.id.tabIcon);
         userImg.setImageResource(R.drawable.man_user);
-        TextView tabTitile=(TextView) userTabView.findViewById(R.id.tabTitle);
-        tabTitile.setText(R.string.username);
-      final TextView orderDetails=(TextView) userTabView.findViewById(R.id.orderdetails);
-        DatabaseReference noOfOrdersComplete=FirebaseDatabase.getInstance().getReference("noOfOrdersComplete");
-        noOfOrdersComplete.child(common.getCurrentUser()).addValueEventListener(new ValueEventListener() {
+        TextView tabTitle= userTabView.findViewById(R.id.tabTitle);
+        tabTitle.setText(R.string.username);
+        final TextView userOrderCompleteNoText=userTabView.findViewById(R.id.orderdetails);
+        DatabaseReference noOfOrdersComplete=FirebaseDatabase.getInstance().
+                getReference("noOfOrdersComplete");
+        noOfOrdersComplete.child(common.getCurrentUser()).
+                addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-               int  userTotalOrder=Integer.valueOf(dataSnapshot.child("totalOrder").getValue().toString());
-               int userCompletedOrder=Integer.valueOf(dataSnapshot.child("completedOrder").getValue().toString());
-                orderDetails.setText(getString(R.string.tabBelow,String.valueOf(userTotalOrder),String.valueOf(userCompletedOrder)));
+                int userTotalOrder=0;
+                int userCompletedOrder=0;
+                if(dataSnapshot.exists()){
+                    try {
 
+                        userTotalOrder = Integer.parseInt(Objects.requireNonNull(
+                                dataSnapshot.child("totalOrder")
+                                .getValue()).toString());
+                        userCompletedOrder = Integer.parseInt( Objects.requireNonNull
+                                (dataSnapshot.child("completedOrder").getValue()).toString());
+                        userOrderCompleteNoText.setText(getString(R.string.tabBelow,
+                                String.valueOf(userTotalOrder), String.valueOf(userCompletedOrder)));
+                    }
+                    catch (NullPointerException e)
+                    {
+                        Log.d("exceptions","MainActivity line 373");
+                    }
+
+            }
+            else{
+                    userOrderCompleteNoText.setText("");
+
+
+            }
             }
 
 
@@ -384,20 +369,29 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         tabLayout.addTab(tabLayout.newTab().setCustomView(userTabView));
-
+        //Setting tab2 item
         View allUserTabView = LayoutInflater.from(this).inflate(R.layout.tabitem,null);
-        ImageView allUserImg=(ImageView) allUserTabView.findViewById(R.id.tabIcon);
+        ImageView allUserImg=allUserTabView.findViewById(R.id.tabIcon);
         allUserImg.setImageResource(R.drawable.all_person_icon);
-        TextView allUserTabTitile=(TextView) allUserTabView.findViewById(R.id.tabTitle);
-        allUserTabTitile.setText(R.string.allusers);
-     final    TextView allUserorderOverView=(TextView) allUserTabView.findViewById(R.id.orderdetails);
+        TextView allUserTabTitle=allUserTabView.findViewById(R.id.tabTitle);
+        allUserTabTitle.setText(R.string.allusers);
+        final TextView allOrderCompleteNoText=allUserTabView.findViewById(R.id.orderdetails);
         noOfOrdersComplete.child("allOrders").orderByKey().addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                int totalOrder=Integer.valueOf(dataSnapshot.child("totalOrder").getValue().toString());
-                int completedOrder=Integer.valueOf(dataSnapshot.child("completedOrder").getValue().toString());
-                allUserorderOverView.setText(getString(R.string.tabBelow,String.valueOf(totalOrder),String.valueOf(completedOrder)));
+                int totalOrder=0;
+                int completedOrder=0;
+                if (dataSnapshot.exists()) {
+                    try {
+                        totalOrder = Integer.parseInt(Objects.requireNonNull
+                                (dataSnapshot.child("totalOrder").getValue()).toString());
+                        completedOrder = Integer.parseInt(Objects.requireNonNull
+                                (dataSnapshot.child("completedOrder").getValue()).toString());
+                        allOrderCompleteNoText.setText(getString(R.string.tabBelow, String.valueOf(totalOrder), String.valueOf(completedOrder)));
+                    }catch (NullPointerException e){Log.d("exceptions","NullpointerException");}
+                }
+                else
+                allOrderCompleteNoText.setText(" ");
 
 
             }
@@ -409,6 +403,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         tabLayout.addTab(tabLayout.newTab().setCustomView(allUserTabView));
+        tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(viewPager));
 
 
 
@@ -424,12 +419,12 @@ public class MainActivity extends AppCompatActivity {
                 if (dataSnapshot.exists())
                     try {
 
-
-                        common.items.put(dataSnapshot.getKey(), dataSnapshot.getValue().toString());
+                        items.put(dataSnapshot.getKey(), (String) dataSnapshot.getValue());
                     }
                     catch (NullPointerException e)
                     {
-                        Toast.makeText(MainActivity.this, "Loading Items Failed..", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivity.this, "Loading Items Failed..",
+                                Toast.LENGTH_SHORT).show();
                     }
 
             }
@@ -456,13 +451,12 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
-private void fetchUsers(){
+    private void fetchUsers(){
     databaseUsers=database.getReference("users");
     databaseUsers.addChildEventListener(new ChildEventListener() {
         @Override
         public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-            common.userHashMap.put(dataSnapshot.getKey(), dataSnapshot.child("name").getValue()
-                    .toString());
+            userHashMap.put(dataSnapshot.getKey(), (String) dataSnapshot.child("name").getValue());
 
         }
 
@@ -489,10 +483,33 @@ private void fetchUsers(){
 
 }
 
-    public String getSearchOrderNo() {
-        searchText=findViewById(R.id.searchText);
-        return searchOrderNo=searchText.getText().toString().trim();
+    private void fetchUserState() {
+        DatabaseReference databaseUserState = database.getReference("activeUsers");
+
+        databaseUserState.child(common.getCurrentUser())
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        Boolean userState=false;
+                        if (dataSnapshot.exists())
+                        userState = (Boolean) dataSnapshot.getValue();
+                        if (!userState) {
+                            hideTab();
+                            goneDatePicker();
+                            hideViewPager();
+                            hideAddSearchBtn();
+                        }
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+
+                });
     }
+
     public void setGo_btn()
     {
         searchText=findViewById(R.id.searchText);
@@ -537,7 +554,7 @@ private void fetchUsers(){
         cancel_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                common.hideKeyboard(MainActivity.this);
+                hideKeyboard(MainActivity.this);
                 emptySearchText();
                 showAddSearch();
                 goneSearchLayout();
@@ -585,12 +602,20 @@ private void fetchUsers(){
         go_btn=findViewById(R.id.go_button);
         go_btn.setVisibility(View.INVISIBLE);
     }
-    public void keyBoardUp()
+
+    // GETTER FUNCTIONS
+    public String dateToString(Date selectedDate)
     {
 
-        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.SHOW_IMPLICIT);
-
+        SimpleDateFormat dateFormat=new SimpleDateFormat(DATE_FORMAT, Locale.US);
+        dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+        String dateToString=dateFormat.format(selectedDate);
+        return dateToString;
+    }
+    public String getSearchOrderNo() {
+        searchText=findViewById(R.id.searchText);
+        return searchOrderNo=searchText.getText().toString().trim();
     }
 
+    //GETTER FUNCTIONS
 }

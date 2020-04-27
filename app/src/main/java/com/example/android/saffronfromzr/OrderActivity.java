@@ -46,67 +46,55 @@ import androidx.cardview.widget.CardView;
 
 import static com.example.android.saffronfromzr.common.currentUser;
 
-public class OrderActivity extends AppCompatActivity {
+public class OrderActivity extends AppCompatActivity  {
 
-     TextView orderDateText;
-     TextView delDateText;
-     TextView pickDelDateText;
-     TextView addOrderTextView;
-     TextInputEditText  customerNameEditText;
-     NachoTextView itemNameEditText;
+    TextView orderDateText;
+    TextView delDateText;
+    TextView pickDelDateText;
+    TextView addOrderTextView;
+    TextInputEditText customerNameEditText;
+    NachoTextView itemNameEditText;
 
-     CardView orderDateCard, delDateCard;
-     LinearLayout handWorkLayout;
-
-     ProgressBar progressBar;
-     RadioGroup isHandWork;
-     RadioButton handWorkOn,handWorkOff;
-     MaterialButton backButton;
-     MaterialButton addItemButton;
-     ChipGroup itemSuggestionChipGroup;
+    CardView orderDateCard, delDateCard;
 
 
 
+    RadioGroup isHandWork;
+    RadioButton handWorkOn, handWorkOff;
 
-     //FIREBASE DATABASE
-     FirebaseDatabase database=FirebaseDatabase.getInstance();
-     DatabaseReference databaseOrders;
-     DatabaseReference databaseItems;
-     DatabaseReference databaseDeliveryDates;
-     DatabaseReference noOfOrdersComplete;
+    ChipGroup itemSuggestionChipGroup;
 
 
 
-    private String deliveryDateString="1";
+    private String deliveryDateString = "1";
     private String orderDateString;
-    private String customerName="";
-    private int orderno;
+    private String customerName = "";
+
     String orderNo;
 
-     Boolean alreadyAdded =false;
-     Boolean isHandWorkChecked=false;
+
 
     List<order> order;
     List<String> stringChipList;
     List<com.hootsuite.nachos.chip.Chip> chipList;
     public int chipListLength;
-//    HashMap<String,String> items=new HashMap<>();
 
-    Map<String, String> items=new HashMap<>();;
+    Map<String, String> items = new HashMap<>();
+    ;
     HashMap<String, String> itemsToOrder = new HashMap<>();
-    HashMap<String,String> itemsSuggestionList=new HashMap<>();
+    HashMap<String, String> itemsSuggestionList = new HashMap<>();
 
-    final  int VISIBILE=0;
-    final int INVISBILE=4;
-    final int GONE=8;
+    final int VISIBILE = 0;
+    final int INVISBILE = 4;
+    final int GONE = 8;
 
     //VARIABLES
-    Boolean iSFetchAllItems=true;
+
     //FINAL VARIABLES
-    public static final String DATE_FORMAT="dd/MM/yyyy";
+    public static final String DATE_FORMAT = "dd/MM/yyyy";
 
     //OBJECTS
-    common common=new common();
+    common common = new common();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,261 +103,178 @@ public class OrderActivity extends AppCompatActivity {
 
 
 
-        databaseOrders=database.getReference("orders");
-        databaseItems=database.getReference("items");
-        databaseDeliveryDates=database.getReference("deliveryDates");
-        noOfOrdersComplete = database.getReference("noOfOrdersComplete");
+
+
         fetchAllItems();
+
         common.fetchNoOfTotalOrders();
         common.fetchNoOfUserTotalOrders();
 
-//        databaseOrders= FirebaseDatabase.getInstance().getReference("orders");
-//       databaseItems=FirebaseDatabase.getInstance().getReference("items").push();
 
-        order=new ArrayList<>();
-        stringChipList =new ArrayList<>();
-        chipList=new ArrayList<>();
-//        todayYear = calendar.get(Calendar.YEAR);
-//        todayMonth = calendar.get(Calendar.MONTH) + 1;
-//        todayDate = calendar.get(Calendar.DATE);
+        order = new ArrayList<>();
+        stringChipList = new ArrayList<>();
+        chipList = new ArrayList<>();
 
 
         //Binding
-        orderDateText = (TextView) findViewById(R.id.orderDateText);
-//        dateForDelText=(TextView) findViewById(R.id.dateForDelText);
-        delDateText = (TextView) findViewById(R.id.delDateText);
-        pickDelDateText=findViewById(R.id.pickDelDateText);
+        orderDateText =  findViewById(R.id.orderDateText);
+        delDateText =  findViewById(R.id.delDateText);
+        pickDelDateText = findViewById(R.id.pickDelDateText);
 
-        addOrderTextView=(TextView)findViewById(R.id.addOrderTextView);
-        orderDateCard = (CardView) findViewById(R.id.orderDateCard);
-        delDateCard = (CardView) findViewById(R.id.delDateCard);
-
-
-
-
-
-
-
-
+        addOrderTextView =  findViewById(R.id.addOrderTextView);
+        orderDateCard = findViewById(R.id.orderDateCard);
+        delDateCard =  findViewById(R.id.delDateCard);
 
         customerNameEditText = (TextInputEditText) findViewById(R.id.customerName);
-
         itemNameEditText = (NachoTextView) findViewById(R.id.itemNameEditText);
 
-        isHandWork = (RadioGroup) findViewById(R.id.isHandWork);
-        handWorkOn=(RadioButton)findViewById(R.id.handWorkOn);
-        handWorkOff=(RadioButton)findViewById(R.id.handWorkOff);
+        isHandWork =  findViewById(R.id.isHandWork);
+        handWorkOn =  findViewById(R.id.handWorkOn);
+        handWorkOff =  findViewById(R.id.handWorkOff);
 
-        handWorkLayout = (LinearLayout) findViewById(R.id.handWorkLayout);
 
-        progressBar = (ProgressBar) findViewById(R.id.progressBar);
 
-        backButton=(MaterialButton)findViewById(R.id.backButton);
-        addItemButton=(MaterialButton)findViewById(R.id.addItemButton);
 
-        itemSuggestionChipGroup=(ChipGroup) findViewById(R.id.itemSuggestionChipGroup);
+
+
+
+
+
+        itemSuggestionChipGroup = (ChipGroup) findViewById(R.id.itemSuggestionChipGroup);
+
+
         getOrderNo();
-            setTodayDate();
-            addOrderTextView.setText(getString(R.string.addorder,getOrderNo()));
+        setTodayDate();
+        addOrderTextView.setText(getString(R.string.addorder, getOrderNo()));
+        //Todo (6): Make pickdates only one object
 
-            orderDateCard.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    openBottonCalender(true);
-                }
-            });
-            delDateCard.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    openBottonCalender(false);
-                }
-            });
+        orderDateCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openBottonCalender(true);
+            }
+        });
+        delDateCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openBottonCalender(false);
+            }
+        });
+
+
         customerNameEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
                 resetItemSuggestion();
+                //Todo (7): resetItemSuggestion(), Why this function running before and after text changes of customerNameEditText
+                //Defines in itemNameEdit
+
 
             }
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
-                resetItemSuggestion();
+//                resetItemSuggestion();
             }
 
             @Override
             public void afterTextChanged(Editable editable) {
                 getCustomerName();
-                if (validation())
-                {
+                if (validation()) {
                     setHandWorkLayoutVisibility(VISIBILE);
                     setAddOrderTextViewVisibility(INVISBILE);
-                    backButtonVisibility(GONE);
-                }
-                else
-                {
+
+                } else {
                     setHandWorkLayoutVisibility(GONE);
                     setAddOrderTextViewVisibility(VISIBILE);
-                    backButtonVisibility(VISIBILE);
+
                 }
 
             }
         });
-            itemNameEditText.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-                    getCustomerName();
-                    if (getItemName().isEmpty())
-                    {
-                        resetItemSuggestion();
-
-                    }
-
-                }
-
-                @Override
-                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                    itemNameEditText.addChipTerminator('\n', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_ALL);
-
-                    if (getItemName().isEmpty())
-                    {
-                       resetItemSuggestion();
-                    }
-
-                }
-
-                @Override
-                public void afterTextChanged(Editable editable) {
-                    if(isHandWorkChecked){
-                    resetRadioButton();
-                   }
-
-                    getItemName();
-                    setItemsSuggestionList(getItemName());
-
-                    if (validation()) {
-                        setHandWorkLayoutVisibility(VISIBILE);
-                        setAddOrderTextViewVisibility(INVISBILE);
-                        backButtonVisibility(GONE);
-                    }
-                    else
-                    {
-                        setHandWorkLayoutVisibility(GONE);
-                        setAddOrderTextViewVisibility(VISIBILE);
-                        backButtonVisibility(VISIBILE);
-                    }
-
-                }
-            });
-
-
-            isHandWork.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-
-                Boolean isHandWork;
-
-                @Override
-                public void onCheckedChanged(RadioGroup radioGroup, int checkedId) {
-
-                    switch (checkedId) {
-                        case R.id.handWorkOn:
-                            isHandWork = true;
-                            progressBarOn();
-                            break;
-                        case R.id.handWorkOff:
-                            isHandWork = false;
-                            progressBarOn();
-                            break;
-
-                    }
-
-
-                    itemNameEditTextToHashMap();
-
-                    addOrder(orderDateString,deliveryDateString,customerName,isHandWork,itemsToOrder);
-
-                        dataReset();
-
-                        progressBarOff();
-
-//                        boolean isInserted = myDb.insertData(getOrderNo(), orderDateToString(), delDateToString(), getCustomerName(), getItemName(), isHandWork);
-
-
-//                        if (isInserted = true) {
-//
-//                            dataReset();
-//                            progressBarOff();
-//
-//
-//                        } else
-//
-//                            Toast.makeText(OrderActivity.this, "Something Went Wrong Try Again", Toast.LENGTH_SHORT).show();
-
-
-
-
-                }
-
-            });
-
-
-
-
-
-
-        }
-
-    private String getOrderNo() {
-        Intent intent=getIntent();
-        Toast.makeText(this, orderNo=intent.getStringExtra("orderNo"), Toast.LENGTH_SHORT).show();
-       return orderNo=intent.getStringExtra("orderNo");
-
-    }
-
-
-    private void resetRadioButton() {
-        if(handWorkOn.isChecked())
-        {
-            handWorkOn.setChecked(false);
-            isHandWorkChecked=false;
-        }
-        else
-            handWorkOff.setChecked(false);
-        isHandWorkChecked=false;
-    }
-
-
-    private void addChips(String itemName) {
-
-        final Chip chip = new Chip(this);
-        chip.setText(itemName + '\n');
-        chip.setCheckable(false);
-        chip.setClickable(true);
-        itemSuggestionChipGroup.addView(chip);
-        itemSuggestionChipGroup.setVisibility(View.VISIBLE);
-        chip.setOnClickListener(new View.OnClickListener() {
+        itemNameEditText.addTextChangedListener(new TextWatcher() {
             @Override
-            public void onClick(View view) {
-                stringChipList = itemNameEditText.getChipValues();
-                chipList=itemNameEditText.getAllChips();
-                chipListLength=stringChipList.size();
-                if (chipListLength==0) {
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
-                    itemNameEditText.setText(chip.getText());
-                    itemNameEditText.addChipTerminator('\n', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_ALL);
+                getCustomerName();
+                if (getItemName().isEmpty()) {
+                    //getItemName() returns a string value
+                    //that is un chipped string
+                    //if it is empty that is called we want to resetItemSuggestion
+                    // for work addChips() in setItemSuggestionList()
+                    //if we don't reset it next item search wii not perform
 
-                }
-                else {
-//                    Toast.makeText(OrderActivity.this, "else runned", Toast.LENGTH_SHORT).show();
-                    stringChipList.add(chipListLength, chip.getText().toString());
-                    itemNameEditText.setText(stringChipList);
-                    itemNameEditText.addChipTerminator('\n', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_ALL);
+                    resetItemSuggestion();
+
                 }
 
             }
 
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                itemNameEditText.addChipTerminator('\n', ChipTerminatorHandler.BEHAVIOR_CHIPIFY_ALL);
+
+                if (getItemName().isEmpty()) {
+                    resetItemSuggestion();
+                }
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+                getItemName();
+                setItemsSuggestionList(getItemName());
+
+                if (validation()) {
+                    setHandWorkLayoutVisibility(VISIBILE);
+                    setAddOrderTextViewVisibility(INVISBILE);
+
+                } else {
+                    setHandWorkLayoutVisibility(GONE);
+                    setAddOrderTextViewVisibility(VISIBILE);
+
+                }
+
+            }
         });
+
+
+        isHandWork.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+
+            Boolean isHandWork;
+
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int checkedId) {
+
+                switch (checkedId) {
+                    case R.id.handWorkOn:
+                        isHandWork = true;
+                        progressBarOn();
+                        break;
+                    case R.id.handWorkOff:
+                        isHandWork = false;
+                        progressBarOn();
+                        break;
+
+                }
+
+
+                itemNameEditTextToHashMap();
+                //Todo (9): itemNameEditTextToHashmap(), What this function do ?
+                //Converts items in itemNameEditText to items hashmap for items tree in Db
+
+                addOrder(orderDateString, deliveryDateString, customerName, isHandWork, itemsToOrder);
+                progressBarOff();         //Todo (10): Make ProgressBarOff() after only order uploads in DB
+
+
+            }
+
+        });
+
+
     }
 
 
@@ -379,32 +284,106 @@ public class OrderActivity extends AppCompatActivity {
         order order=new order(currentUser+deliveryDateString,currentUser,
                 orderDateString,deliveryDateString,customerName,isHandWork,items,
                 false);
+        DatabaseReference databaseOrders=FirebaseDatabase.getInstance().getReference("orders");
         databaseOrders.child(getOrderNo()).setValue(order);
         //Adding order under orders child.
         common.incrementNoOfOrder("totalOrder");
         //Increment Total order
         addItemsToDatabase();
         //Add items under items child
-
+        backToLastActivity();
 
 
     }
-
-
     //1. Inserting values to items tree
-    //2. items is hashmap
+    //2. items is Hash Map
     private void addItemsToDatabase()
     {
 
-
+       DatabaseReference databaseItems = FirebaseDatabase.getInstance().getReference("items");
         databaseItems.setValue(items);
 
 
 
     }
+    //Getting  value from edit text to items HashMap
+    public void itemNameEditTextToHashMap()
+    {
+        int i=1;
+
+        for (com.hootsuite.nachos.chip.Chip chip:itemNameEditText.getAllChips())
+        {
+            CharSequence text=chip.getText();
+            String itemKey=text.toString().replaceAll("\\s","").toLowerCase();
+            String itemName=text.toString().toLowerCase();
+            items.put(itemKey,itemName);
+            //items tree in DB
+            itemsToOrder.put("item"+i,itemKey);
+            //order tree
+            i++;
+
+        }
+    }
+    //Todo (11) fetchAllItems() , In future avoid this function
+    //fetch items tree to items HashMap for preventing deletes for previous items in items tree
+    public Boolean fetchAllItems()
+    {
+        DatabaseReference databaseItems = FirebaseDatabase.getInstance().getReference("items");
+        databaseItems.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                String itemKey = dataSnapshot.getKey();
+                String itemName = (String) dataSnapshot.getValue();
+                if (!items.containsKey(itemKey))
+                    items.put(itemKey,itemName);
 
 
-    public String getCustomerName()
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+        return true;
+    }
+
+
+
+    private void backToLastActivity() {
+        OrderActivity.super.finish();
+    }
+
+
+
+
+
+
+
+        //GETTER METHODS
+        private String getOrderNo() {
+            Intent intent = getIntent();
+            return orderNo = intent.getStringExtra("orderNo");
+            // Set Variable orderNo by intent putExtra()
+        }
+        public String getCustomerName()
         {
            customerName=customerNameEditText.getText().toString().toLowerCase().trim();
           return customerName;
@@ -413,9 +392,10 @@ public class OrderActivity extends AppCompatActivity {
         public String getItemName(){
             String ItemName;
             int ItemNameLength=itemNameEditText.getTokenValues().toString().length();
-            ItemName= itemNameEditText.getTokenValues().toString().substring(1,ItemNameLength-1).toLowerCase().trim();
+            ItemName= itemNameEditText.getTokenValues().toString().substring(1,ItemNameLength-1).
+                    toLowerCase().trim();
             return ItemName;}
-
+            //GETTER METHODS
 
 
 
@@ -423,50 +403,19 @@ public class OrderActivity extends AppCompatActivity {
 
 
     public void progressBarOn () {
-            handWorkLayout.setVisibility(View.INVISIBLE);
+        ProgressBar progressBar=findViewById(R.id.progressBar);
             progressBar.setVisibility(View.VISIBLE);
         }
         public void progressBarOff () {
+            ProgressBar progressBar=findViewById(R.id.progressBar);
 
-
-            handWorkLayout.setVisibility(View.GONE);
             progressBar.setVisibility(View.GONE);
 
         }
-        public void keyBoardUp()
-        {
-
-            InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-            inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.SHOW_IMPLICIT);
-
-        }
-        public void dataReset() {
-
-            setTodayDate();
-            delDateText.setText("");
-            iSFetchAllItems=true;
-
-            customerNameEditText.clearFocus();
-            customerNameEditText.setText("");
-
-            itemNameEditText.clearFocus();
-            itemNameEditText.setText("");
-            resetItemSuggestion();
-            items.clear();
-
-                stringChipList.clear();
-
-
-            setPickDelDateTextViewVisibility(VISIBILE);
-            isHandWorkChecked=true;
-            setHandWorkLayoutVisibility(GONE);
-            setAddOrderTextViewVisibility(VISIBILE);
-            backButtonVisibility(VISIBILE);
-            fetchAllItems();
 
 
 
-        }
+        //SETTING SYSTEM DATE
 
         public void setTodayDate ()
         {
@@ -479,16 +428,18 @@ public class OrderActivity extends AppCompatActivity {
         return !deliveryDateString.equals("1") && !customerName.isEmpty()  && !itemNameEditText.getAllChips().isEmpty();
 
             //2.delivery date must be contain and must be future date.
-            //3.orderno must be number and no in database - primary key
-            //4.cutsomer name must be conatin
-            //5.atleast one item
-            //6.if all true visibileHandWorkLayout()
+            //3.order no must be number and no in database - primary key
+            //4.Customer name must be contain
+            //5.At least one item
+            //6.if all true VisibleHandWorkLayout()
 
 
         }
 
         public void setHandWorkLayoutVisibility(int visibility)
         {
+            LinearLayout handWorkLayout;
+            handWorkLayout=findViewById(R.id.handWorkLayout);
             handWorkLayout.setVisibility(visibility);
 
         }
@@ -497,10 +448,7 @@ public class OrderActivity extends AppCompatActivity {
             addOrderTextView.setVisibility(visibility);
         }
 
-        public void backButtonVisibility(int Visibility)
-        {
-           backButton.setVisibility(Visibility);
-        }
+
 
 
         //This function bottom up the calenderView
@@ -532,19 +480,19 @@ public class OrderActivity extends AppCompatActivity {
                                 if (validation()) {
                                     setHandWorkLayoutVisibility(VISIBILE);
                                     setAddOrderTextViewVisibility(INVISBILE);
-                                    backButtonVisibility(GONE);
+
                                 }
                                 else
                                 {
                                     setHandWorkLayoutVisibility(GONE);
                                     setAddOrderTextViewVisibility(VISIBILE);
-                                    backButtonVisibility(VISIBILE);
+
                                 }
 
 
                             }
                         }).display();
-                keyBoardUp();
+
 
             }
             //DELIVERY DATE CARD
@@ -569,24 +517,28 @@ public class OrderActivity extends AppCompatActivity {
                                 deliveryDateString=dateToString(date);
                                 setPickDelDateTextViewVisibility(GONE);
                                 delDateText.setText(deliveryDateString);
-                                Toast.makeText(OrderActivity.this, deliveryDateString, Toast.LENGTH_SHORT).show();
+
                             }
                         })
                         .display();
-                keyBoardUp();
-                if (validation()) {
-                    setHandWorkLayoutVisibility(VISIBILE);
-                    setAddOrderTextViewVisibility(INVISBILE);
-                    backButtonVisibility(GONE);
-                }
-                else
-                {
-                    setHandWorkLayoutVisibility(GONE);
-                    setAddOrderTextViewVisibility(VISIBILE);
-                    backButtonVisibility(VISIBILE);
-                }
+
+
+            }
+            common.keyBoardUp(this);
+            if (validation()) {
+                setHandWorkLayoutVisibility(VISIBILE);
+                setAddOrderTextViewVisibility(INVISBILE);
+
+            }
+            else
+            {
+                setHandWorkLayoutVisibility(GONE);
+                setAddOrderTextViewVisibility(VISIBILE);
+
             }
         }
+
+        //CONVERTS DATE AND RETURN TO STRING IN DD/MM/YYYY FORMAT
         public String dateToString(Date selectedDate)
         {
 
@@ -601,63 +553,14 @@ public class OrderActivity extends AppCompatActivity {
         }
 
 
-        //getting value from edit text to items hashmap
-        public void itemNameEditTextToHashMap()
-        {
-            int i=1;
 
-            for (com.hootsuite.nachos.chip.Chip chip:itemNameEditText.getAllChips())
-            {
-                CharSequence text=chip.getText();
-                String itemKey=text.toString().replaceAll("\\s","").toLowerCase();
-                String itemName=text.toString().toLowerCase();
-                items.put(itemKey,itemName);
-                itemsToOrder.put("item"+i,itemKey);
-                i++;
-
-            }
-        }
-        public Boolean fetchAllItems()
-        {
-
-            databaseItems.addChildEventListener(new ChildEventListener() {
-                @Override
-                public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-                    String itemKey = dataSnapshot.getKey();
-                    String itemName = (String) dataSnapshot.getValue();
-                    if (!items.containsKey(itemKey))
-                    items.put(itemKey,itemName);
-
-
-                }
-
-                @Override
-                public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-                }
-
-                @Override
-                public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
-
-                }
-
-                @Override
-                public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                }
-            });
-            return true;
-        }
+    //METHODS BELONG TO ITEM SUGGESTION FEATURE IN APP
+        //Set items suggestion by fetching itemKey and itemName in items tree and
+        //and pass itemName to addChips() by parameter
         public void setItemsSuggestionList(String itemName)
 
         {
+            DatabaseReference databaseItems = FirebaseDatabase.getInstance().getReference("items");
 
             databaseItems.startAt(itemName).endAt(itemName+"\uf8ff").limitToFirst(3).orderByKey().addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
@@ -668,6 +571,7 @@ public class OrderActivity extends AppCompatActivity {
                         try {
                             String itemKey=ds.getKey();
                             String itemName =  ds.getValue().toString();
+
 
                             if (!itemsSuggestionList.containsKey(itemKey)) {
                                 addChips(itemName);
@@ -690,12 +594,49 @@ public class OrderActivity extends AppCompatActivity {
                 }
             });
         }
-        public boolean isItemNameEditTextIsFocused()
-        {
+         private void addChips(String itemName) {
 
-             return itemNameEditText.isFocused();
-        }
-       public void clearItemSuggestionList()
+        final Chip chip = new Chip(this);
+        chip.setText(itemName + '\n');
+        chip.setCheckable(false);
+        chip.setClickable(true);
+
+
+        itemSuggestionChipGroup.addView(chip);
+        itemSuggestionChipGroup.setVisibility(View.VISIBLE);
+        chip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                stringChipList = itemNameEditText.getChipValues();
+                //Get all chips values in String
+                chipListLength = stringChipList.size();
+                // Setting stringChipList list size
+
+                if (chipListLength == 0) {
+
+                    itemNameEditText.setText(chip.getText());
+                } else {
+                    stringChipList.add(chipListLength, chip.getText().toString());
+                    itemNameEditText.setText(stringChipList);
+                }
+                itemNameEditText.addChipTerminator('\n',
+                        ChipTerminatorHandler.BEHAVIOR_CHIPIFY_ALL);
+
+                //If chipsListLength=0
+                //1. Set itemNameEditText = chip text value
+                //else
+                //1.Add chip text to stringChipList where position = stringChipListLength
+                //2.set all values in stringChipList in itemNameEditText
+
+                //  set itemNameEdit Values chips by chipTerminator or '\n'
+
+            }
+
+        });
+    }
+
+
+        public void clearItemSuggestionList()
         {
             itemsSuggestionList.clear();
         }
@@ -703,30 +644,45 @@ public class OrderActivity extends AppCompatActivity {
         {
             itemSuggestionChipGroup.removeAllViews();
         }
-         public void resetItemSuggestion()
-         {
-             clearItemSuggestionList();
-             clearItemSuggestionChipGroup();
+        public void resetItemSuggestion()
+        {
+            clearItemSuggestionList();
+            clearItemSuggestionChipGroup();
 
-         }
-         public boolean checkRadioGroupActive(RadioGroup radioGroup)
-         {
-             int checkedRadioButtonId = radioGroup.getCheckedRadioButtonId();
-             return checkedRadioButtonId == -1;
-         }
-         public void setRadioGroupUncheck(RadioGroup radioGroup)
-         {
-             radioGroup.clearCheck();
-         }
+        }
+    //METHODS BELONG TO ITEM SUGGESTION FEATURE IN APP
 
 
-    public void setItemSuggestionChipGroupVisibility(int Visibility) {
-        itemSuggestionChipGroup.setVisibility(Visibility);
+
+    //UNUSED METHODS MAY BE USED IN FUTURE
+    public void dataReset() {
+
+        setTodayDate();
+        delDateText.setText("");
+
+
+        customerNameEditText.clearFocus();
+        customerNameEditText.setText("");
+
+        itemNameEditText.clearFocus();
+        itemNameEditText.setText("");
+        resetItemSuggestion();
+        items.clear();
+
+        stringChipList.clear();
+
+
+        setPickDelDateTextViewVisibility(VISIBILE);
+
+        setHandWorkLayoutVisibility(GONE);
+        setAddOrderTextViewVisibility(VISIBILE);
+
+        fetchAllItems();
+
+
+
     }
-
-
-
-
+    //UNUSED METHODS MAY BE USED IN FUTURE
 
 
     }

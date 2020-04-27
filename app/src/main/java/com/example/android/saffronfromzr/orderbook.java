@@ -15,8 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 public class orderbook  {
-    FirebaseDatabase database=FirebaseDatabase.getInstance();
-    DatabaseReference databaseUsers;
+
      private String customerName,itemName,orderDateString,orderNo,desigenrId,designerName,item1,item2,item3;
      private Boolean isHandWork,isWorkComplete;
     private long itemCount;
@@ -176,39 +175,6 @@ public class orderbook  {
         return orderDateString;
     }
 
-//    public void designerIdToName()
-//
-//    {
-//
-//        databaseUsers=database.getReference("users");
-//        databaseUsers.addChildEventListener(new ChildEventListener() {
-//            @Override
-//            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-//                setDesignerName((String) dataSnapshot.child("Pc11KFoS1JMqxRtD5OwFMmBaaFF2").child("name").getValue());
-//
-//            }
-//
-//            @Override
-//            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-//
-//            }
-//
-//            @Override
-//            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-//
-//            }
-//
-//            @Override
-//            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-//
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
-//    }
 
 
 }
