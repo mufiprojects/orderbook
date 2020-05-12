@@ -43,6 +43,7 @@ public class signInActivity  extends AppCompatActivity {
 
     FirebaseDatabase database=FirebaseDatabase.getInstance();
     DatabaseReference users;
+    DatabaseReference activeUsers;
 
 
     @Override
@@ -52,6 +53,7 @@ public class signInActivity  extends AppCompatActivity {
 
         mAuth=FirebaseAuth.getInstance();
         users=database.getReference("users");
+        activeUsers=database.getReference("activeUsers");
         designerNameText=findViewById(R.id.designerNameText);
         googleSignInLayout=findViewById(R.id.googleSignInLayout);
         googleSignInButton=findViewById(R.id.googleSignInButton);
@@ -118,10 +120,9 @@ public class signInActivity  extends AppCompatActivity {
             }
         }
     }
-private void firebaseAuthWithGoogle(GoogleSignInAccount account)
+private void firebaseAuthWithGoogle(final GoogleSignInAccount account)
 {
 
-    Log.d("firebaseSignIn","firebaseAuthWithGoogle:"+account.getId());
     AuthCredential credential= GoogleAuthProvider.getCredential(account.getIdToken(),null);
     mAuth.signInWithCredential(credential)
             .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -130,11 +131,9 @@ private void firebaseAuthWithGoogle(GoogleSignInAccount account)
                     if (task.isSuccessful()) {
 
 
-                        FirebaseUser user = mAuth.getCurrentUser();
-                        Toast.makeText(signInActivity.this, "User Signed In",
-                                Toast.LENGTH_SHORT).show();
                         String currentUser=mAuth.getCurrentUser().getUid();
                         users.child(currentUser).child("name").setValue(getDesignerName());
+                        activeUsers.child(currentUser).setValue(true);
                         startActivity(new Intent(getApplicationContext(),MainActivity.class));
 
 

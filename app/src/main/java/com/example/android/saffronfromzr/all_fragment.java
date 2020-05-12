@@ -60,8 +60,8 @@ public class all_fragment extends Fragment {
         progressBar = view.findViewById(R.id.progressBar);
         recyclerView = view.findViewById(R.id.orderListRecyclerView);
 
-        setProgressBarOn();
-        //SETTING PROGRESS BAR ON BEFORE fetchData()
+
+
          LinearLayoutManager linearLayoutManager;
         linearLayoutManager = new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,
                 false);

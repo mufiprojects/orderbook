@@ -96,6 +96,7 @@ public class OrderActivity extends AppCompatActivity  {
     //OBJECTS
     common common = new common();
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -148,12 +149,13 @@ public class OrderActivity extends AppCompatActivity  {
         addOrderTextView.setText(getString(R.string.addorder, getOrderNo()));
         //Todo (6): Make pickdates only one object
 
-        orderDateCard.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                openBottonCalender(true);
-            }
-        });
+//        orderDateCard.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                openBottonCalender(true);
+//            }
+//        });
+
         delDateCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -285,8 +287,11 @@ public class OrderActivity extends AppCompatActivity  {
                 orderDateString,deliveryDateString,customerName,isHandWork,items,
                 false);
         DatabaseReference databaseOrders=FirebaseDatabase.getInstance().getReference("orders");
+
         databaseOrders.child(getOrderNo()).setValue(order);
         //Adding order under orders child.
+        makeOrderActive();
+        //Making orderActive for workflow.
         common.incrementNoOfOrder("totalOrder");
         //Increment Total order
         addItemsToDatabase();
@@ -305,6 +310,12 @@ public class OrderActivity extends AppCompatActivity  {
 
 
 
+    }
+    private void makeOrderActive()
+    {
+        //WorkFlow
+        DatabaseReference databaseItems = FirebaseDatabase.getInstance().getReference("orderNoActive");
+        databaseItems.child(getOrderNo()).setValue(true);
     }
     //Getting  value from edit text to items HashMap
     public void itemNameEditTextToHashMap()
@@ -449,25 +460,28 @@ public class OrderActivity extends AppCompatActivity  {
         }
 
 
-
+//         .setTab0DisplayMinutes(false)
+//                        .setTab0DisplayHours(false)
+//                        .setTab0DisplayDays(true)
+//                        .setTab1DisplayMinutes(false)
+//                        .setTab1DisplayHours(false)
+//                        .setTab1DisplayDays(true)
+//              .mainColor(getResources().getColor(R.color.white))
+//            .titleTextColor(getResources().getColor(R.color.white))
+//            .bottomSheet()
 
         //This function bottom up the calenderView
         public void openBottonCalender(Boolean isOrderDateCardSelected) {
         //If user clicks on orderDateCard
             if (isOrderDateCardSelected) {
+                //Todo(13):Fix Bug
                 new DoubleDateAndTimePickerDialog.Builder(this)
+
 
                         .title("SELECT DATES")
                         .tab0Text("ORDER DATE")
                         .tab1Text("DELIVERY DATE")
-                        .setTab0DisplayMinutes(false)
-                        .setTab0DisplayHours(false)
-                        .setTab0DisplayDays(true)
-                        .setTab1DisplayMinutes(false)
-                        .setTab1DisplayHours(false)
-                        .setTab1DisplayDays(true)
-                        .mainColor(getResources().getColor(R.color.white))
-                        .titleTextColor(getResources().getColor(R.color.white))
+                        .backgroundColor(getResources().getColor(R.color.white))
                         .bottomSheet()
                         .listener(new DoubleDateAndTimePickerDialog.Listener() {
                             @Override
@@ -498,12 +512,15 @@ public class OrderActivity extends AppCompatActivity  {
             //DELIVERY DATE CARD
             else
             {
+
                 new SingleDateAndTimePickerDialog.Builder(this)
 
                         .title("PICK DELIVERY DATE")
-                        .displayDays(true)
+                        .setTimeZone(TimeZone.getDefault())
+                        .displayDays(false)
                         .displayMonth(true)
                         .displayYears(true)
+                        .displayDaysOfMonth(true)
                         .displayHours(false)
                         .displayMinutes(false)
                         .displayAmPm(false)
@@ -514,6 +531,7 @@ public class OrderActivity extends AppCompatActivity  {
                         .listener(new SingleDateAndTimePickerDialog.Listener() {
                             @Override
                             public void onDateSelected(Date date) {
+                                Log.d("selectedDate",dateToString(date));
                                 deliveryDateString=dateToString(date);
                                 setPickDelDateTextViewVisibility(GONE);
                                 delDateText.setText(deliveryDateString);
@@ -523,8 +541,9 @@ public class OrderActivity extends AppCompatActivity  {
                         .display();
 
 
+
             }
-            common.keyBoardUp(this);
+                        common.keyBoardUp(this);
             if (validation()) {
                 setHandWorkLayoutVisibility(VISIBILE);
                 setAddOrderTextViewVisibility(INVISBILE);

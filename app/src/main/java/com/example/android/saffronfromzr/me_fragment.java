@@ -60,7 +60,7 @@ public class me_fragment extends Fragment  {
         progressBar = view.findViewById(R.id.progressBar);
         recyclerView = view.findViewById(R.id.orderListRecyclerView);
 
-        setProgressBarOn();
+
         //SETTING PROGRESS BAR ON BEFORE fetchData()
         LinearLayoutManager linearLayoutManager;
         linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL,
@@ -87,6 +87,7 @@ public class me_fragment extends Fragment  {
 
                             @Override
                             public orderbook parseSnapshot(@NonNull DataSnapshot snapshot) {
+
 
                                 String orderNo=snapshot.getKey();
                                 Boolean isWorkComplete=(Boolean) snapshot.child("workComplete").

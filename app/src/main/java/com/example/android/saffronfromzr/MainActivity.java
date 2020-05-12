@@ -87,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
         fetchItems();  // Fetching all items in items tree to items hash map
         fetchUsers(); // Fetching all users in users tree to users hash map
         createTabItems(); // create tabs
-        setupViewPager(viewPager);
+//        setupViewPager(viewPager);
         addSearchBtnListener();//Listerner function when clicks on addsearch button
 
 
@@ -120,8 +120,6 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
-
-
     private void addSearchBtnListener() {
         addSearchBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -159,15 +157,16 @@ public class MainActivity extends AppCompatActivity {
                            Intent orderActivity = new Intent(getApplicationContext(),
                                    OrderActivity.class);
                            orderActivity.putExtra("orderNo",getSearchOrderNo());
-                           Toast.makeText(MainActivity.this, getSearchOrderNo(),
-                                   Toast.LENGTH_SHORT).show();
-                           startActivity(orderActivity);
+
+                         startActivity(orderActivity);
                        } else {
                            String designerId = (String) dataSnapshot.child("designerId").getValue();
                            String customerName = (String) dataSnapshot.child("customerName")
                                    .getValue();
                            Boolean isHandWork = (Boolean) dataSnapshot.child("handWork").getValue();
                            String orderDate = (String) dataSnapshot.child("orderDate").getValue();
+                           String delDate = (String) dataSnapshot.child("deliveryDate").getValue();
+
 
                            long itemsCount = dataSnapshot.child("items").getChildrenCount();
                            String item1 = (String) dataSnapshot.child("items").child("item1")
@@ -188,7 +187,7 @@ public class MainActivity extends AppCompatActivity {
                            Intent orderDetailsActivity = new Intent(getApplicationContext(),
                                    orderDetailsActivity.class);
                            common.putExtra(orderDetailsActivity,orderNo,designerId,customerName,
-                                   isHandWork,orderDate,deliveryDate,itemsCount,item1,item2,item3);
+                                   isHandWork,orderDate,delDate,itemsCount,item1,item2,item3);
                            startActivity(orderDetailsActivity);
                        }
                    }
