@@ -14,8 +14,11 @@ import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.firebase.ui.database.SnapshotParser;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -31,12 +34,14 @@ public class me_fragment extends Fragment  {
     //XML
     private RecyclerView recyclerView;
     private ProgressBar progressBar;
+    private TextView noOrderMsgText;
 
     //Firebase objects
     private FirebaseRecyclerAdapter adapter;
 
     //VARIABLES
     private long itemCount;
+//    private Boolean isEmpty=true;
 
 
     //OBJECTS
@@ -59,6 +64,8 @@ public class me_fragment extends Fragment  {
 
         progressBar = view.findViewById(R.id.progressBar);
         recyclerView = view.findViewById(R.id.orderListRecyclerView);
+        noOrderMsgText=view.findViewById(R.id.noOrderMsgText);
+
 
 
         //SETTING PROGRESS BAR ON BEFORE fetchData()
@@ -74,11 +81,20 @@ public class me_fragment extends Fragment  {
         return view;
 
     }
+    private void showNoOrderMsg()
+    {
+        noOrderMsgText.setVisibility(View.VISIBLE);
+    }
     //Fetch data from Fire base and add to Fire base RecyclerAdapter
     private void fetch() {
+
+
             Query query = FirebaseDatabase.getInstance().
                 getReference("orders").orderByChild("designerId_deliveryDate").
                     equalTo(currentUser+deliveryDate);
+            checkDataExists(query);
+
+
 
         FirebaseRecyclerOptions<orderbook> options =
                 new FirebaseRecyclerOptions.Builder<orderbook>()
@@ -89,6 +105,8 @@ public class me_fragment extends Fragment  {
                             public orderbook parseSnapshot(@NonNull DataSnapshot snapshot) {
 
 
+                                setProgressBarOn();
+//                                isEmpty=false;
                                 String orderNo=snapshot.getKey();
                                 Boolean isWorkComplete=(Boolean) snapshot.child("workComplete").
 
@@ -193,7 +211,27 @@ public class me_fragment extends Fragment  {
         };
         recyclerView.setAdapter(adapter);
 
+
     }
+
+    private void checkDataExists(Query query) {
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (!dataSnapshot.exists()){
+                    showNoOrderMsg();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+
+
     public class ViewHolder extends RecyclerView.ViewHolder {
         private TextView cardNo;
         private TextView customerName;

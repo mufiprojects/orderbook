@@ -13,8 +13,11 @@ import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.firebase.ui.database.SnapshotParser;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -29,6 +32,7 @@ public class all_fragment extends Fragment {
     //XML
     private RecyclerView recyclerView;
     private ProgressBar progressBar;
+    private TextView noOrderMsgText;
 
     //FIREBASE OBJECTS
     private FirebaseRecyclerAdapter adapter;
@@ -59,6 +63,7 @@ public class all_fragment extends Fragment {
 
         progressBar = view.findViewById(R.id.progressBar);
         recyclerView = view.findViewById(R.id.orderListRecyclerView);
+        noOrderMsgText=view.findViewById(R.id.noOrderMsgText);
 
 
 
@@ -80,7 +85,7 @@ public class all_fragment extends Fragment {
         final Query query = FirebaseDatabase.getInstance().
                 getReference().child("orders").orderByChild("deliveryDate").equalTo(deliveryDate);
         //Query for fetch data
-
+        checkDataExists(query);
         options =
                 new FirebaseRecyclerOptions.Builder<orderbook>()
                         .setQuery(query, new SnapshotParser<orderbook>() {
@@ -132,6 +137,27 @@ public class all_fragment extends Fragment {
                             }
                         }).build();
     }
+
+    private void checkDataExists(Query query) {
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (!dataSnapshot.exists()){
+                    showNoOrderMsg();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void showNoOrderMsg() {
+            noOrderMsgText.setVisibility(View.VISIBLE);
+    }
+
     private void fetchDataToAdapter()
 
     {
