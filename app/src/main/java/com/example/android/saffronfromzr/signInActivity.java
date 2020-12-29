@@ -31,6 +31,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+
+
 public class signInActivity  extends AppCompatActivity {
     private static final int RC_SIGN_IN=234;
 
@@ -44,6 +46,7 @@ public class signInActivity  extends AppCompatActivity {
     FirebaseDatabase database=FirebaseDatabase.getInstance();
     DatabaseReference users;
     DatabaseReference activeUsers;
+
 
 
     @Override

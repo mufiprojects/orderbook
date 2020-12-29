@@ -26,10 +26,18 @@
     <string name="itemCount">%1$s items</string>
     <string name="orderDateOnDetails">Order date %1$s</string>
     <string name="deliveryDateOnDetails">Delivery date %1$s</string>
-    <string name="orderTakenBy">Order taken by %1$s</string>
+    <string name="orderTakenBy">Designed by %1$s</string>
     <string name="tabBelow">%1$s out of %2$s completed</string>
     <string name="numValue">%1$d</string>
     <string name="noOrderMsg">There\'s no orders on selected Date Tap  + Button to add new Have a nice day :)</string>
-
+    <string name="last_entry_label">Use last entry</string>
+    <string name="joly_label">Joly</string>
+    <string name="tajammul_label">Tajammul</string>
+    <string name="althaf_label">Althaf</string>
+    <string name="malavika_label">Malavika</string>
+    <string name="reshma_label">Reshma</string>
+    <string name="sheena_label">Sheena</string>
+    <string name="unni_label">Unni</string>
+    <string name="edit_label">Edit</string>
 
 </resources>

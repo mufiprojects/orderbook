@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:visibility="visible">
-m
+
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -292,6 +292,16 @@ m
                 android:layout_marginEnd="16dp"
                 android:layout_marginTop="5dp"
                 android:hint="@string/items"/>
+            <CheckBox
+                android:id="@+id/lastEntry"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/itemNameEditText"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="16dp"
+                android:text="@string/last_entry_label"
+                android:visibility="gone"
+                />
 
 <!--        <com.google.android.material.textfield.TextInputLayout-->
 <!--            android:id="@+id/itemNameTextLayout"-->

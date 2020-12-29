@@ -6,6 +6,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -29,8 +30,10 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Objects;
 import java.util.TimeZone;
 import androidx.annotation.NonNull;
@@ -56,6 +59,8 @@ public class MainActivity extends AppCompatActivity {
     TextInputEditText searchText;
     MaterialButton cancel_btn;
     MaterialButton go_btn;
+    MaterialButton unCompletedBtn;
+    TextView malavikastatus,jolyStatus,tajammulStatus,althafStatus,reshmaStatus,sheenaStatus,unniStatus;
 
     DatePickerTimeline datePicker;
 
@@ -66,8 +71,11 @@ public class MainActivity extends AppCompatActivity {
 
     //Variables
     static String deliveryDate;
+    Map<String, Boolean> productionStatusMap = new HashMap<>();
 
     String searchOrderNo;
+    static Boolean  editModeOn=false;
+    boolean gone=false;
 
     //objects
     common common=new common();
@@ -78,10 +86,19 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         fetchUserState();
-        startService(new Intent(this,backgroundService.class));
+//        startService(new Intent(this,backgroundService.class));
         viewPager= findViewById(R.id.viewPager);
         datePicker = findViewById(R.id.datePickerTimeline);
         addSearchBtn = findViewById(R.id.fabBtn);
+
+        malavikastatus=findViewById(R.id.malavikaText);
+        jolyStatus=findViewById(R.id.jolyText);
+        tajammulStatus=findViewById(R.id.tajammulText);
+        althafStatus=findViewById(R.id.althafText);
+        reshmaStatus=findViewById(R.id.reshmaText);
+        sheenaStatus=findViewById(R.id.sheenaText);
+        unniStatus=findViewById(R.id.unniText);
+
 
         common.getCurrentUser(); // FETCHING CURRENT USER
         fetchItems();  // Fetching all items in items tree to items hash map
@@ -100,6 +117,7 @@ public class MainActivity extends AppCompatActivity {
         //SET DATE PICKER INITIAL DATE AS SYSTEM DATE
         Date date=new GregorianCalendar(year,month,day+1).getTime();
         deliveryDate=dateToString(date);
+        Log.d("deliveryDate",deliveryDate);
         // STATIC VARIABLE MAKE THIS TODAY DATE
         setupViewPager(viewPager);
         datePicker.setOnDateSelectedListener(new OnDateSelectedListener() {
@@ -117,6 +135,7 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+        fetchProductionStatus();
 
 
     }
@@ -227,6 +246,7 @@ public class MainActivity extends AppCompatActivity {
         searchText.requestFocus();
         setGo_btn();
         setCancel_btn();
+        setUnCompletedBtn();
     }
 
     private void hideAddSearchBtn() {
@@ -284,7 +304,7 @@ public class MainActivity extends AppCompatActivity {
                 if (position==0)
                 {
                     try {
-                        Objects.requireNonNull(tabLayout.getTabAt(0)).select();
+                        Objects.requireNonNull(tabLayout.getTabAt(1)).select();
                     }
                     catch (NullPointerException n)
                     {
@@ -308,7 +328,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void setViewPagerWithTabPosition() {
         if (tabLayout.getSelectedTabPosition()==0) {
-            viewPager.setCurrentItem(0);
+            viewPager.setCurrentItem(1);
         }
         else
         {
@@ -481,6 +501,122 @@ public class MainActivity extends AppCompatActivity {
     });
 
 }
+    private void fetchProductionStatus(){
+        Log.d("productionStatus","function runned");
+
+        DatabaseReference malavikaStatus=FirebaseDatabase.getInstance().
+                getReference("workFlow");
+        malavikaStatus.child("productionStatus").addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                String operatorName = dataSnapshot.getKey();
+                Boolean status = (Boolean) dataSnapshot.getValue();
+                Log.d("productionStatus","operatorname:"+operatorName+"status"+status);
+                assert operatorName != null;
+                assert status != null;
+                productionStatusMap.put(operatorName,status);
+                checkWithProductionMap();
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                String operatorName = dataSnapshot.getKey();
+                Boolean status = (Boolean) dataSnapshot.getValue();
+                assert operatorName != null;
+                assert status != null;
+                productionStatusMap.put(operatorName,status);
+                checkWithProductionMap();
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+    }
+
+    private void checkWithProductionMap() {
+
+        if (Objects.equals(productionStatusMap.get("malavika"), true))
+        {
+            malavikastatus.setTextColor(getResources().getColor(R.color.finishColor));
+        }
+        else
+        {
+            malavikastatus.setTextColor(getResources().getColor(R.color.primaryDarkColor));
+        }
+
+
+
+        if (Objects.equals(productionStatusMap.get("joly"), true))
+        {
+            jolyStatus.setTextColor(getResources().getColor(R.color.finishColor));
+        }
+        else
+        {
+            jolyStatus.setTextColor(getResources().getColor(R.color.primaryDarkColor));
+        }
+
+
+        if (Objects.equals(productionStatusMap.get("tajammul"), true))
+        {
+            tajammulStatus.setTextColor(getResources().getColor(R.color.finishColor));
+        }
+        else
+        {
+            tajammulStatus.setTextColor(getResources().getColor(R.color.primaryDarkColor));
+        }
+
+
+        if (Objects.equals(productionStatusMap.get("althaf"), true))
+        {
+            althafStatus.setTextColor(getResources().getColor(R.color.finishColor));
+        }
+        else
+        {
+            althafStatus.setTextColor(getResources().getColor(R.color.primaryDarkColor));
+        }
+
+        if (Objects.equals(productionStatusMap.get("reshma"), true))
+        {
+            reshmaStatus.setTextColor(getResources().getColor(R.color.finishColor));
+        }
+        else
+        {
+            reshmaStatus.setTextColor(getResources().getColor(R.color.primaryDarkColor));
+        }
+
+        if (Objects.equals(productionStatusMap.get("sheena"), true))
+        {
+            sheenaStatus.setTextColor(getResources().getColor(R.color.finishColor));
+        }
+        else
+        {
+            sheenaStatus.setTextColor(getResources().getColor(R.color.primaryDarkColor));
+        }
+
+        if (Objects.equals(productionStatusMap.get("unni"), true))
+        {
+            unniStatus.setTextColor(getResources().getColor(R.color.finishColor));
+        }
+        else
+        {
+            unniStatus.setTextColor(getResources().getColor(R.color.primaryDarkColor));
+        }
+    }
 
     private void fetchUserState() {
         DatabaseReference databaseUserState = database.getReference("activeUsers");
@@ -547,6 +683,23 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+    private void setUnCompletedBtn()
+    {
+        unCompletedBtn=findViewById(R.id.uncompleteBtn);
+        unCompletedBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goUnCompleteActivity();
+            }
+        });
+    }
+
+    private void goUnCompleteActivity() {
+        Intent unCompletedActivity = new Intent(getApplicationContext(),
+                uncompleted.class);
+        startActivity(unCompletedActivity);
+    }
+
     private void setCancel_btn()
     {
         cancel_btn=findViewById(R.id.cancel_button);
@@ -614,6 +767,26 @@ public class MainActivity extends AppCompatActivity {
     public String getSearchOrderNo() {
         searchText=findViewById(R.id.searchText);
         return searchOrderNo=searchText.getText().toString().trim();
+    }
+    private void ViewPagerTouchListerner()
+    {
+        viewPager.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if(event.getAction() == MotionEvent.ACTION_DOWN){
+                    if(!gone){
+                        addSearchBtn.setVisibility(View.GONE);
+                    }
+                        gone = true;
+                    }else{
+                        addSearchBtn.setVisibility(View.VISIBLE);
+                        gone = false;
+
+                    }
+
+                    return false;
+            }
+        });
     }
 
     //GETTER FUNCTIONS

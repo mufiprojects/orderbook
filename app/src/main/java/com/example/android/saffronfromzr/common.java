@@ -24,6 +24,8 @@ import static com.example.android.saffronfromzr.MainActivity.deliveryDate;
 
       static HashMap<String, String> items=new HashMap<>();
       static HashMap<String, String>  userHashMap=new HashMap<>();
+      static String lastEntryCustomerName="";
+      static String lastEntryDeliveryDate;
       public static int noOfOrdersInAll,noOfOrdersInUser;
       public static  String currentUser;
 

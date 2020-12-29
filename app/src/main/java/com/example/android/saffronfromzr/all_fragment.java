@@ -2,6 +2,7 @@ package com.example.android.saffronfromzr;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,16 +13,21 @@ import android.widget.TextView;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.firebase.ui.database.SnapshotParser;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+import java.util.Objects;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import static com.example.android.saffronfromzr.MainActivity.deliveryDate;
 import static com.example.android.saffronfromzr.common.items; //ITEM KEY | ITEM NAME
@@ -65,13 +71,14 @@ public class all_fragment extends Fragment {
         recyclerView = view.findViewById(R.id.orderListRecyclerView);
         noOrderMsgText=view.findViewById(R.id.noOrderMsgText);
 
+//         LinearLayoutManager linearLayoutManager;
+//        linearLayoutManager = new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,
+//                false);
+//        recyclerView.setLayoutManager(linearLayoutManager);
+//        recyclerView.setHasFixedSize(true);
 
-
-         LinearLayoutManager linearLayoutManager;
-        linearLayoutManager = new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,
-                false);
-        recyclerView.setLayoutManager(linearLayoutManager);
-        recyclerView.setHasFixedSize(true);
+        int numberOfColumns=2;
+        recyclerView.setLayoutManager(new GridLayoutManager(getActivity(),numberOfColumns));
 
             fetchData();
             fetchDataToAdapter();
@@ -186,10 +193,15 @@ public class all_fragment extends Fragment {
 
                 viewHolder.item1TextView.setText(
                         common.makeFirstLetterCap(items.get(orderbook.getItem1())));
+                viewHolder.checkOperationStatus(orderbook,1,orderbook.getItem1());
+
+
                 if (itemCount>1)
                 {
                     viewHolder.showItemsTextView(itemCount,orderbook);
                 }
+
+
                 viewHolder.designerNameLayout.setVisibility(View.VISIBLE);
                 viewHolder.setDesignerNameText(
                         common.makeFirstLetterCap(orderbook.getDesignerName()));
@@ -217,6 +229,9 @@ public class all_fragment extends Fragment {
         };
         recyclerView.setAdapter(adapter);
     }
+
+
+
     public class ViewHolder extends RecyclerView.ViewHolder {
         private TextView cardNo;
         private TextView customerName;
@@ -224,10 +239,15 @@ public class all_fragment extends Fragment {
         private TextView orderDate;
         private TextView designerNameText;
 
+
         private TextView item1TextView;
         private TextView item2TextView;
         private TextView item3TextView;
         private TextView noOfMoreItems;
+
+        private TextView item1operationStatusTextView;
+        private TextView item2operationStatusTextView;
+        private TextView item3operationStatusTextView;
 
         private ImageView handWorkOnImageView;
         private ImageView handWorkOffImageView;
@@ -267,6 +287,9 @@ public class all_fragment extends Fragment {
 
             item3TextView=itemView.findViewById(R.id.item3TextView);
             noOfMoreItems=itemView.findViewById(R.id.noOfMoreItems);
+            item1operationStatusTextView=itemView.findViewById(R.id.item1OperationStatus);
+            item2operationStatusTextView=itemView.findViewById(R.id.item2OperationStatus);
+            item3operationStatusTextView=itemView.findViewById(R.id.item3OperationStatus);
 
 
 
@@ -316,6 +339,7 @@ public class all_fragment extends Fragment {
 
 
                 item2TextView.setText(common.makeFirstLetterCap(items.get(orderbook.getItem2())));
+                checkOperationStatus(orderbook,2,orderbook.getItem2());
                 item2Layout.setVisibility(View.VISIBLE);
 
             }
@@ -323,8 +347,9 @@ public class all_fragment extends Fragment {
             {
                 item2TextView.setText(common.makeFirstLetterCap(items.get(orderbook.getItem2())));
                 item2Layout.setVisibility(View.VISIBLE);
-
+                checkOperationStatus(orderbook,2,orderbook.getItem2());
                 item3TextView.setText(common.makeFirstLetterCap(items.get(orderbook.getItem3())));
+                checkOperationStatus(orderbook,3,orderbook.getItem3());
                 item3Layout.setVisibility(View.VISIBLE);
 
                 if (noOfItems>3)
@@ -337,7 +362,104 @@ public class all_fragment extends Fragment {
             }
 
         }
+
+        private void checkOperationStatus(final orderbook orderbook, final int itemNo, final String item) {
+
+
+            Log.d("operationStatus","method runned");
+            FirebaseDatabase database=FirebaseDatabase.getInstance();
+            DatabaseReference operationStatusDb= database.getReference("workFlow");
+
+
+                    operationStatusDb.child("operationStatus")
+                    .child(orderbook.getOrderNo())
+                    .addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                            Log.d("operationStatus","childAdded");
+                            ArrayList<String> status=new ArrayList<>();
+                            Boolean patternStatus;
+
+
+                            try {
+                                patternStatus = (Boolean) Objects.requireNonNull(dataSnapshot.child(item)
+                                        .child("pattern").getValue());
+                                if(Objects.requireNonNull(patternStatus)){
+                                    status.add("P");}
+                            }
+                            catch (Exception e){
+                                Log.d("exceptions","exception");
+                            }
+
+
+                            try {
+
+                                Boolean handworkStatus = (Boolean) Objects.requireNonNull(dataSnapshot.child(item)
+                                        .child("handwork").getValue());
+                                if (Objects.requireNonNull(handworkStatus)) {
+                                    status.add("H");
+                                }
+                            }
+                            catch (Exception e){
+                                Log.d("exceptions","exception");
+                            }
+                            try {
+                                Boolean cuttingStatus = (Boolean) Objects.requireNonNull(dataSnapshot.child(item)
+                                        .child("cutting").getValue());
+                                if(Objects.requireNonNull(cuttingStatus)){
+                                    status.add("C");}
+                            }
+                            catch (Exception e){
+                                Log.d("exceptions","exception");
+                            }
+                            try {
+
+                                Boolean stitchingStatus = (Boolean) Objects.requireNonNull(dataSnapshot.child(item)
+                                        .child("stitching").getValue());
+                                if (Objects.requireNonNull(stitchingStatus)) {
+                                    status.add("S");
+
+                                }
+                            }
+                            catch (Exception e){
+                                Log.d("exceptions","exception");
+                            }
+
+//                                Log.d("operationStatus", String.valueOf(cuttingStatus));
+
+                                    Log.d("status","orderno"+orderbook.getOrderNo()+
+                                            "itemName"+item+" "+status.toString());
+                                    writeOperation(String.valueOf(status), itemNo);
+                                    status.clear();
+
+
+
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
+        }
+
+        private void writeOperation(String operation,int itemNo) {
+
+            switch (itemNo){
+                case 1:
+                    item1operationStatusTextView.setText(operation);
+                    break;
+                case 2:
+                    item2operationStatusTextView.setText(operation);
+                    break;
+                case 3:
+                    item3operationStatusTextView.setText(operation);
+                    break;
+            }
+        }
     }
+
+
 
     @Override
     public void onStart() {

@@ -148,8 +148,46 @@
         android:layout_below="@id/headLayout"
         android:layout_above="@id/bottomLayout"
 
-        />
 
+        />
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/codeTextLayout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone"
+        android:hint="enter code"
+
+
+        >
+
+        <com.google.android.material.textfield.TextInputEditText
+
+            android:id="@+id/codeText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/white"
+            android:background="@color/white"
+            android:inputType="numberPassword"
+            android:textSize="12sp"
+
+            />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/editButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/bottomLayout"
+        android:layout_alignParentEnd="true"
+        android:text="@string/edit_label"
+        android:textColor="@color/black"
+        app:backgroundTint="@color/white"
+        app:cornerRadius="18dp"
+        android:foregroundGravity="left"
+        android:visibility="gone"
+        />
     <LinearLayout
         android:id="@+id/bottomLayout"
         android:layout_width="match_parent"
@@ -168,6 +206,7 @@
             app:autoSizeTextType="uniform"
             android:layout_gravity="center_vertical"
             />
+
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/workCompleteButton"

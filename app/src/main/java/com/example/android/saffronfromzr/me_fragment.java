@@ -233,6 +233,7 @@ public class me_fragment extends Fragment  {
 
 
     public class ViewHolder extends RecyclerView.ViewHolder {
+
         private TextView cardNo;
         private TextView customerName;
         private TextView orderNo;

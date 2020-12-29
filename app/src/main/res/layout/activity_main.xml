@@ -58,10 +58,69 @@
 
     </LinearLayout>
     <LinearLayout
+        android:id="@+id/workFlowStatusLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:layout_below="@id/datePickerTimelineLayout"
+        android:orientation="horizontal"
+        >
+        <TextView
+            android:id="@+id/malavikaText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="1sp"
+            android:textSize="14sp"
+            android:text="@string/malavika_label"/>
+        <TextView
+            android:id="@+id/jolyText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="1sp"
+            android:textSize="14sp"
+            android:text="@string/joly_label"/>
+        <TextView
+            android:id="@+id/tajammulText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="1sp"
+            android:textSize="14sp"
+            android:text="@string/tajammul_label"/>
+        <TextView
+            android:id="@+id/althafText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="1sp"
+            android:textSize="14sp"
+            android:text="@string/althaf_label"/>
+        <TextView
+            android:id="@+id/reshmaText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="1sp"
+            android:textSize="14sp"
+            android:text="@string/reshma_label"/>
+        <TextView
+            android:id="@+id/sheenaText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="1sp"
+            android:textSize="14sp"
+            android:text="@string/sheena_label"/>
+        <TextView
+            android:id="@+id/unniText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="1sp"
+            android:textSize="14sp"
+            android:text="@string/unni_label"/>
+
+    </LinearLayout>
+    <LinearLayout
         android:id="@+id/searchLayout"
         android:layout_below="@id/datePickerTimelineLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:visibility="gone"
         android:layout_margin="16dp"
         android:orientation="vertical"
@@ -120,14 +179,26 @@
 
             />
     </LinearLayout>
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/uncompleteBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:layout_marginEnd="1dp"
+            app:cornerRadius="18dp"
+            app:backgroundTint="@color/primaryLightColor"
+            android:text="Uncompleted Orders"
+            android:textColor="@color/white"
+            />
     </LinearLayout>
+
 
 
 
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/viewPager"
-        android:layout_below="@id/searchLayout"
+        android:layout_below="@id/workFlowStatusLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         />
@@ -148,6 +219,20 @@
         app:fabSize="normal"
 
     />
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/guideBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+
+        android:layout_marginBottom="60dp"
+        app:cornerRadius="18dp"
+        app:backgroundTint="@color/backButtonColor"
+        android:text="Guidelines-മാർ‌ഗ്ഗനിർ‌ദ്ദേശങ്ങൾ‌"
+        android:textColor="@color/white"
+
+
+        />
 
 
 

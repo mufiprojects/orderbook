@@ -2,9 +2,12 @@ package com.example.android.saffronfromzr;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -13,6 +16,8 @@ import android.widget.TextView;
 import com.example.android.saffronfromzr.R;
 import com.google.android.gms.common.internal.service.Common;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -27,6 +32,7 @@ import java.util.logging.Logger;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import static com.example.android.saffronfromzr.MainActivity.editModeOn;
 
 public class orderDetailsActivity extends AppCompatActivity {
 
@@ -39,18 +45,25 @@ public class orderDetailsActivity extends AppCompatActivity {
     TextView customerNameView;
     TextView itemsCountView;
 
+    TextInputLayout codeTextLayout;
+    TextInputEditText codeText;
+
     RelativeLayout workCompleteLayout; // Bind this local
 
     ImageView handWorkOnImageView;
     ImageView handWorkOffImageView;
 
+
+
     MaterialButton workCompleteButton; // bind this local
     MaterialButton backBtn;
+    MaterialButton editBtn;
 
     ListView itemsListView;
     long itemsCount;
     String orderNo,customerName,orderDate,deliveryDate,userId,designerId,designerName;
     Boolean isHandWork;
+
     List<String> itemsList=new ArrayList<>();
 
 
@@ -80,6 +93,7 @@ public class orderDetailsActivity extends AppCompatActivity {
         setDataWithView();
 
         setUpBackBtn();
+
 
 
 
@@ -195,8 +209,6 @@ public class orderDetailsActivity extends AppCompatActivity {
                 setItemsList(common.items.get(dataSnapshot.getValue().toString()));
 
 
-
-
             }
 
             @Override
@@ -239,13 +251,18 @@ public class orderDetailsActivity extends AppCompatActivity {
 
                         }
                     } else {
+                        editBtnListner();
 
                         if (workComplete) {
                             showWorkCompleteTab();
 
+
+
                         } else {
 
                             showWorkCompleteButton();
+
+
 
 
                         }
@@ -306,8 +323,69 @@ public class orderDetailsActivity extends AppCompatActivity {
 
 
     }
+    private void editBtnListner(){
+        editBtn=findViewById(R.id.editButton);
+        editBtn.setVisibility(View.VISIBLE);
+        editBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showCodeEditText();
+
+            }
+        });
 
     }
+    private void codeTextListner(){
+        codeText=findViewById(R.id.codeText);
+        codeText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (getCode().equals("04885")){
+                    openOrderActivity();
+                    setEditModeOn();
+                }
+
+            }
+        });
+    }
+
+    private void setEditModeOn() {
+       editModeOn=true;
+
+    }
+
+    private void openOrderActivity() {
+        Intent orderActivity = new Intent(getApplicationContext(),
+                OrderActivity.class);
+        orderActivity.putExtra("orderNo",orderNo);
+        orderActivity.putExtra("customerName",customerName);
+        orderActivity.putExtra("orderDate",orderDate);
+        startActivity(orderActivity);
+    }
+
+    private void showCodeEditText() {
+        codeTextLayout=findViewById(R.id.codeTextLayout);
+        codeTextLayout.setVisibility(View.VISIBLE);
+        codeTextListner();
+    }
+    public String getCode() {
+
+        return  codeText.getText().toString().trim();
+
+    }
+
+
+}
 
 
 
