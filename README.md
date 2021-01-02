@@ -1,8 +1,13 @@
 # OrderBook
-Orderbook is an android app for boutiques.for getting track of delivery dates of orders
-* User can track delivery dates.
-* User receives a notification on every morning saying how many orders to delivery today
-* User can tab work complete switch when the work completed 
+
+An android application to track, remind before the due date, and search orders.
+
+We provide some amazing functionalities like -
+ - A beautiful Clean UI.
+ - Minimal App Size.
+ - Receives notification every day reminding orders that delivery on that day.
+ - Search orders by order no.
+
 
 ![homescreen](https://github.com/ziyadrahman/orderbook/blob/master/screenshots/1.png)
 
