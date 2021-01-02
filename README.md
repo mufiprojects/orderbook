@@ -12,5 +12,5 @@ We provide some amazing functionalities like -
  - Search orders by order no.
 
 
-![orderbook demo gif](https://github.com/ziyadrahman/orderbook/blob/master/screenshots/orderbook.gif)
+![orderbook demo gif](https://github.com/ziyadrahman/orderbook/blob/master/screenshots/orderbook long.gif)
 
