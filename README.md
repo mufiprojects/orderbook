@@ -11,6 +11,5 @@ We provide some amazing functionalities like -
  - Receives notification every day reminding orders that delivery on that day.
  - Search orders by order no.
 
-
 ![orderbook demo gif](https://github.com/ziyadrahman/orderbook/blob/master/screenshots/orderbooklong.gif)
 
