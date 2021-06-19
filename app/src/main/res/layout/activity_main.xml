@@ -1,0 +1,289 @@
+
+
+<RelativeLayout android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabs"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:elevation="10dp"
+        app:tabGravity="fill"
+        app:tabMode="fixed"
+        app:tabIndicatorColor="@color/orderOverviewTextColor"
+        />
+
+
+
+    <LinearLayout
+
+        android:id="@+id/datePickerTimelineLayout"
+        android:layout_below="@id/tabs"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        android:orientation="vertical"
+        android:layout_marginTop="18dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        >
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/timelineContainer"
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardBackgroundColor="@color/primaryColor"
+            app:cardCornerRadius="10dp">
+            <com.vivekkaushik.datepicker.DatePickerTimeline
+                android:padding="2dp"
+                android:id="@+id/datePickerTimeline"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_marginStart="0dp"
+                android:layout_marginTop="0dp"
+                android:layout_marginEnd="0dp"
+                android:background="@color/primaryColor"
+                app:dateTextColor="@color/white"
+                app:dayTextColor="@color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:monthTextColor="@color/white"
+
+                />
+
+        </com.google.android.material.card.MaterialCardView>
+
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/workFlowStatusLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:layout_below="@id/datePickerTimelineLayout"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        >
+        <TextView
+            android:id="@+id/malavikaText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="1sp"
+            android:textSize="14sp"
+            android:text="@string/malavika_label"/>
+        <TextView
+            android:id="@+id/jolyText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="1sp"
+            android:textSize="14sp"
+            android:text="@string/joly_label"/>
+        <TextView
+            android:id="@+id/tajammulText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="1sp"
+            android:textSize="14sp"
+            android:text="@string/tajammul_label"/>
+
+        <TextView
+            android:id="@+id/althafText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="1sp"
+            android:textSize="14sp"
+            android:text="@string/althaf_label"/>
+        <TextView
+            android:id="@+id/reshmaText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="1sp"
+            android:textSize="14sp"
+            android:text="@string/reshma_label"/>
+        <TextView
+            android:id="@+id/sheenaText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="1sp"
+            android:textSize="14sp"
+            android:text="@string/sheena_label"/>
+        <TextView
+            android:id="@+id/unniText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="1sp"
+            android:textSize="14sp"
+            android:text="@string/unni_label"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Hello"
+            />
+        <TextClock
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Hello"
+            />
+        <TextClock
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+        <com.philliphsu.bottomsheetpickers.date.TextViewWithCircularIndicator
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="hello"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/bottom_sheet_behavior"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="hello"
+            />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="hello"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="hello"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="hello"/>
+        
+
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/searchLayout"
+        android:layout_below="@id/datePickerTimelineLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        android:layout_margin="16dp"
+        android:orientation="vertical"
+        >
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:hint="Type Order No."
+
+
+            >
+
+            <com.google.android.material.textfield.TextInputEditText
+
+                android:id="@+id/searchText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/white"
+                android:background="@color/white"
+                android:inputType="number"
+                android:textSize="12sp"
+
+                />
+        </com.google.android.material.textfield.TextInputLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:orientation="horizontal"
+            android:layout_gravity="end">
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/cancel_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="1dp"
+            app:cornerRadius="18dp"
+            app:backgroundTint="@color/backButtonColor"
+            android:text="CANCEL"
+            android:textColor="@color/white"
+            android:layout_gravity="end"
+
+            />
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/go_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="invisible"
+            android:layout_marginEnd="1dp"
+            app:cornerRadius="18dp"
+            app:backgroundTint="@color/backButtonColor"
+            android:text="GO"
+            android:textColor="@color/white"
+            android:layout_gravity="end"
+
+            />
+    </LinearLayout>
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/uncompleteBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:layout_marginEnd="1dp"
+            app:cornerRadius="18dp"
+            app:backgroundTint="@color/primaryLightColor"
+            android:text="Uncompleted Orders"
+            android:textColor="@color/white"
+            />
+    </LinearLayout>
+
+
+
+
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/viewPager"
+        android:layout_below="@id/workFlowStatusLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
+
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+
+        android:id="@+id/fabBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="40dp"
+        app:backgroundTint="@color/white"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:elevation="6dp"
+        android:layout_marginBottom="60dp"
+        android:src="@drawable/searchadd"
+        app:fabSize="normal"
+
+    />
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/guideBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+
+        android:visibility="gone"
+        android:layout_marginBottom="60dp"
+        app:cornerRadius="18dp"
+        app:backgroundTint="@color/backButtonColor"
+        android:text="Guidelines-മാർ‌ഗ്ഗനിർ‌ദ്ദേശങ്ങൾ‌"
+        android:textColor="@color/white"
+
+
+        />
+
+
+
+
+</RelativeLayout>

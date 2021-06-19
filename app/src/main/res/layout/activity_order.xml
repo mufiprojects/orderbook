@@ -1,0 +1,451 @@
+<FrameLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fragmentContainer"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:visibility="visible">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:orientation="vertical">
+    >
+
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:id="@+id/appBarLayout"
+            android:layout_width="match_parent"
+            android:layout_height="53dp"
+            android:elevation="18dp">
+            <com.google.android.material.appbar.AppBarLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/white">
+                <androidx.appcompat.widget.Toolbar
+                    android:id="@+id/addOrderToolBar"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:id="@+id/addOrderTextView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:textSize="23sp"
+                            android:textColor="@color/primaryColor"
+                            android:layout_marginTop="13dp"
+                            android:layout_marginStart="15dp"
+                            android:layout_marginBottom="13dp"
+                            android:visibility="visible"
+
+                            />
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal"
+                            android:layout_alignParentEnd="true">
+
+                            <LinearLayout
+                                android:id="@+id/handWorkLayout"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_gravity="center"
+                                android:foregroundGravity="bottom"
+                                android:orientation="horizontal"
+                                android:visibility="gone">
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textColor="@color/backButtonColor"
+                                    android:textSize="20sp"
+                                    android:foregroundGravity="center_horizontal"
+                                    android:layout_gravity="center"
+                                    android:gravity="center"
+                                    android:text="@string/isHandWork"
+                                    />
+                                <RadioGroup
+                                    android:id="@+id/isHandWork"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:orientation="horizontal">
+
+
+
+
+                                    />
+                                    <RadioButton
+                                        android:id="@+id/handWorkOn"
+                                        android:layout_width="48dp"
+                                        android:layout_height="48dp"
+
+                                        android:button="@null"
+                                        app:buttonCompat="@null"
+                                        android:background="@drawable/handworktick"
+                                        />
+
+                                    <RadioButton
+                                        android:id="@+id/handWorkOff"
+                                        android:layout_width="48dp"
+                                        android:layout_height="48dp"
+                                        android:button="@null"
+                                        app:buttonCompat="@null"
+                                        android:background="@drawable/handworkwrong"
+
+                                        />
+                                </RadioGroup>
+
+
+
+
+                            </LinearLayout>
+                        </LinearLayout>
+                    </RelativeLayout>
+
+                </androidx.appcompat.widget.Toolbar>
+
+            </com.google.android.material.appbar.AppBarLayout>
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+        <LinearLayout
+            android:id="@+id/orderDateCardLayout"
+            android:layout_below="@id/appBarLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:orientation="horizontal"
+            >
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/orderDateCard"
+                android:layout_width="127dp"
+                android:layout_height="69dp"
+                android:layout_marginTop="8dp"
+              app:cardBackgroundColor="@color/primaryColor"
+                android:layout_weight="1"
+                android:elevation="6dp"
+                app:cardCornerRadius="6dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:alpha="0.7"
+
+                        android:gravity="center"
+                        android:paddingStart="18dp"
+                        android:paddingTop="7dp"
+                        android:paddingEnd="18dp"
+                        android:text="@string/orderDate"
+                        android:textColor="@color/white"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+
+
+                        />
+
+                    <TextView
+                        android:id="@+id/orderDateText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="11dp"
+                        android:paddingEnd="11dp"
+                        android:textColor="@color/white"
+                        android:textSize="21sp"
+                        android:gravity="center"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/delDateCard"
+                android:layout_width="127dp"
+                android:layout_height="69dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginStart="1dp"
+                android:layout_weight="1"
+                android:elevation="6dp"
+                app:cardCornerRadius="6dp"
+                 app:cardBackgroundColor="@color/primaryColor"
+
+                >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                    <TextView
+                        android:id="@+id/pickDelDateText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="7dp"
+                        android:gravity="center"
+                        android:text="@string/pick"
+                        android:textColor="@color/white"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:alpha="0.7"
+
+
+                        />
+                    <TextView
+
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="7dp"
+                        android:gravity="center"
+                        android:text="@string/delDate"
+                        android:textColor="@color/white"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:alpha="0.7"
+
+
+                        />
+
+                    <TextView
+                        android:id="@+id/delDateText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:textSize="21sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/white"
+
+                        />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+        </LinearLayout>
+        <ScrollView
+            android:id="@+id/orderDetailsLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/orderDateCardLayout">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:id="@+id/customerDetailsLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+
+                android:baselineAligned="false"
+                android:orientation="horizontal">
+
+
+
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                    android:layout_width="0dp"
+                    android:layout_weight="2"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:hint="CUSTOMER NAME"
+
+
+                    >
+
+                    <com.google.android.material.textfield.TextInputEditText
+
+                        android:id="@+id/customerName"
+                        android:layout_width="match_parent"
+
+                        android:layout_height="match_parent"
+                        android:backgroundTint="@color/white"
+                        android:background="@color/white"
+                        android:imeOptions="actionNext"
+                        android:nextFocusDown="@id/itemNameEditText"
+                        android:inputType="textPersonName"
+                        android:textSize="12sp"
+
+                        />
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+
+
+
+            </LinearLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/orderAmountTextLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginTop="5dp"
+                android:layout_below="@id/customerDetailsLayout"
+                android:layout_gravity="center_vertical"
+                android:hint="ORDER AMOUNT"
+
+
+                >
+
+                <com.google.android.material.textfield.TextInputEditText
+
+                    android:id="@+id/orderAmountText"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:backgroundTint="@color/white"
+                    android:background="@color/white"
+                    android:imeOptions="actionNext"
+                    android:inputType="number"
+                    android:textSize="12sp"
+
+                    />
+            </com.google.android.material.textfield.TextInputLayout>
+            <com.hootsuite.nachos.NachoTextView
+                android:id="@+id/itemNameEditText"
+                android:layout_below="@id/orderAmountTextLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:chipTextColor="@color/white"
+                app:chipBackground="@color/chipColor"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginTop="5dp"
+                android:hint="@string/items"/>
+
+
+
+            <CheckBox
+                android:id="@+id/lastEntry"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/itemNameEditText"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="16dp"
+                android:text="@string/last_entry_label"
+                android:visibility="gone"
+                />
+
+<!--        <com.google.android.material.textfield.TextInputLayout-->
+<!--            android:id="@+id/itemNameTextLayout"-->
+<!--            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginStart="16dp"-->
+
+<!--            android:layout_below="@id/customerDetailsLayout"-->
+<!--            android:hint="Items "-->
+
+
+<!--            >-->
+
+<!--            <com.google.android.material.textfield.TextInputEditText-->
+
+<!--                android:id="@+id/itemNameEditText"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginEnd="16dp"-->
+<!--                android:background="@color/white"-->
+<!--                android:imeOptions="actionDone"-->
+<!--                android:inputType="textPersonName"-->
+<!--                android:textSize="12sp"-->
+
+<!--                />-->
+<!--        </com.google.android.material.textfield.TextInputLayout>-->
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/itemSuggestionChipGroup"
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/itemNameEditText"
+                />
+            <LinearLayout
+                android:id="@+id/itemNotFoundLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_below="@id/itemNameEditText"
+                android:visibility="gone"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="1dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:text="@string/itemNotFound"
+                    android:textColor="@color/backButtonColor"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/addItemButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cornerRadius="18dp"
+                app:backgroundTint="@color/radioButton"
+                android:text="@string/addText"
+                android:textColor="@color/white"/>
+            </LinearLayout>
+        <RelativeLayout
+            android:id="@+id/scrollView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/customerDetailsLayout"
+
+            android:layout_marginBottom="1dp">
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+
+
+                >
+
+
+<!--                <androidx.cardview.widget.CardView-->
+<!--                    android:id="@+id/handWorkCard"-->
+
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_alignParentRight="true"-->
+<!--                    android:layout_gravity="end"-->
+<!--                    android:layout_marginTop="8dp"-->
+<!--                    android:layout_marginEnd="8dp"-->
+<!--                    android:elevation="6dp"-->
+<!--                    android:visibility="visible"-->
+<!--                    app:cardCornerRadius="6dp"-->
+
+
+<!--                    >-->
+
+
+                <ProgressBar
+                    android:id="@+id/progressBar"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="invisible" />
+
+                <!--                </androidx.cardview.widget.CardView>-->
+
+            </RelativeLayout>
+        </RelativeLayout>
+</RelativeLayout>
+</ScrollView>
+
+
+
+
+
+
+    </RelativeLayout>
+</FrameLayout>

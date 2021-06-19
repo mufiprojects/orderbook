@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="8dp">
+<TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="8sp"
+
+    android:text="Pick Postpond Delivery Date"
+    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+    android:textStyle="bold"
+    android:textColor="@color/white"
+
+    />
+    <LinearLayout
+        android:id="@+id/datePickerTimelineLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/timlineContainer"
+            android:layout_margin="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardBackgroundColor="@color/primaryColor"
+
+            app:cardCornerRadius="10dp">
+            <com.vivekkaushik.datepicker.DatePickerTimeline
+                android:padding="2dp"
+                android:id="@+id/postpondDatePicker"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="0dp"
+                android:layout_marginTop="0dp"
+                android:layout_marginEnd="0dp"
+                android:background="@color/primaryColor"
+                app:dateTextColor="@color/white"
+                app:dayTextColor="@color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:monthTextColor="@color/white"
+
+                />
+
+        </com.google.android.material.card.MaterialCardView>
+
+    </LinearLayout>
+</LinearLayout>

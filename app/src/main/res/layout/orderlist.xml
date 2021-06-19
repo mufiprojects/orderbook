@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="150dp"
+    android:layout_height="170dp"
+    android:layout_margin="3dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardBackgroundColor="#E0B9F3"
+    android:elevation="16dp"
+
+    >
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#E0B9F3"
+
+       >
+
+        <LinearLayout
+            android:id="@+id/layoutOfOrderNoAndOrderDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/cardNo"
+                android:layout_width="39dp"
+                android:layout_height="39dp"
+                android:background="#B169D4"
+                android:padding="1dp"
+                android:gravity="center_horizontal"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textColor="@color/white"
+                android:textSize="27sp" />
+            <TextView
+                android:id="@+id/orderNoOnCard"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_gravity="center_vertical"
+                android:text="128"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textColor="@color/white"
+                android:textSize="20sp" />
+            <LinearLayout
+                android:id="@+id/orderCompletedLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:orientation="horizontal"
+
+                >
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/tickmark"/>
+
+
+            </LinearLayout>
+
+
+
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/handWorkCardLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_below="@id/layoutOfOrderNoAndOrderDate"
+            android:orientation="horizontal"
+            android:layout_marginStart="10dp"
+
+            >
+            <TextView
+                android:textColor="@color/white"
+                android:id="@+id/handWorkOnCard"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="2dp"
+                android:layout_gravity="center_vertical"
+                android:text="HAND WORK" />
+
+            <ImageView
+
+                android:id="@+id/handWorkOnImageView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="3dp"
+                android:layout_gravity="center_vertical"
+                android:background="@color/primaryColor"
+                android:src="@drawable/tickmark"
+                android:visibility="gone"
+
+
+                />
+
+            <ImageView
+                android:id="@+id/handWorkOffImageView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_cancel_black_24dp"
+                android:visibility="visible" />
+
+
+
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/layoutOfNameAndItem"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_below="@id/handWorkCardLayout"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/customerNameOnCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:foregroundGravity="left"
+                android:gravity="center_vertical"
+
+                android:text="ZIYAD RAHMAN"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:textColor="@color/primaryColor"
+                android:textStyle="bold" />
+            <LinearLayout
+                android:id="@+id/itemsLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="visible">
+                <LinearLayout
+                    android:id="@+id/item1Layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    >
+                    <TextView
+                        android:id="@+id/item1TextView"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/white"
+                        app:autoSizeTextType="uniform"
+                        app:autoSizeMinTextSize="14sp"
+                        app:autoSizeMaxTextSize="24sp"
+                        android:text="Wedding Gown"
+                        />
+                    <TextView
+                        android:id="@+id/item1OperationStatus"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/primaryDarkColor"
+                        android:textSize="12sp"
+
+
+
+                        />
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/item2Layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:visibility="gone"
+                    >
+                    <TextView
+                        android:id="@+id/item2TextView"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/white"
+                        app:autoSizeTextType="uniform"
+                        app:autoSizeMinTextSize="14sp"
+                        app:autoSizeMaxTextSize="24sp"
+
+                        />
+                    <TextView
+                        android:id="@+id/item2OperationStatus"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/primaryDarkColor"
+                        android:textSize="12sp"
+
+
+                        />
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/item3Layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:visibility="gone"
+                    >
+
+                    <TextView
+                        android:id="@+id/item3TextView"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/white"
+                        app:autoSizeTextType="uniform"
+                        app:autoSizeMinTextSize="14sp"
+                        app:autoSizeMaxTextSize="24sp"
+
+                        />
+                    <TextView
+                        android:id="@+id/item3OperationStatus"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/primaryDarkColor"
+                        android:textSize="12sp"
+
+
+
+                        />
+                </LinearLayout>
+                <TextView
+                    android:id="@+id/noOfMoreItems"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    android:textColor="@color/primaryColor"
+                    app:autoSizeTextType="uniform"
+                    app:autoSizeMinTextSize="14sp"
+                    app:autoSizeMaxTextSize="24sp"
+
+                    />
+
+
+
+
+            </LinearLayout>
+
+
+
+        </LinearLayout>
+
+
+
+        <TextView
+            android:id="@+id/orderDateOnCard"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="9dp"
+            android:layout_marginBottom="5dp"
+            android:visibility="gone"
+            android:gravity="center"
+            android:text="28/08/1996"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="@color/white"
+            android:textSize="12sp"
+            android:textStyle="italic"
+            />
+
+        <LinearLayout
+            android:id="@+id/designerNameLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:visibility="gone"
+            android:layout_marginTop="2dp"
+            android:layout_marginEnd="7dp"
+            android:layout_marginBottom="10dp"
+            android:gravity="end"
+            android:orientation="horizontal">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="visible"
+                android:src="@drawable/dressmaker"
+                />
+            <TextView
+                android:id="@+id/designerNameText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/backButtonColor"
+                android:layout_gravity="end"
+                android:gravity="end"
+                android:text="RESHMA"/>
+
+        </LinearLayout>
+    </RelativeLayout>
+
+
+</com.google.android.material.card.MaterialCardView>

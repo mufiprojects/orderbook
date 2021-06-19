@@ -1,0 +1,23 @@
+<!--?xml version="1.0" encoding="UTF-8"?-->
+<resources>
+  <color name="primaryColor">#B169D4</color>
+  <color name="primaryLightColor">#E0B9F3</color>
+  <color name="primaryDarkColor">#F5004F</color>
+  <color name="secondaryColor">#4CAF50</color>
+  <color name="secondaryLightColor">#B44CAF50</color>
+  <color name="secondaryDarkColor">#883997</color>
+  <color name="primaryTextColor">#000000</color>
+  <color name="secondaryTextColor">#fafafa</color>
+  <color name="textColorOnTab">#817D83</color>
+  <color name="orderOverviewTextColor">#B169D4</color>
+  <color name="backgroundColor">#C35AF6</color>
+  <color name="lessVisibileTextColor">#F5F5F5</color>
+  <color name="finishColor" >#71F683</color>
+  <color name="backButtonColor"> #F15E6D</color>
+  <color name="hintTextColor">#9E9E9E</color>
+    <color name="radioButton">#F17FE9</color>
+  <color name="chipColor">#E0B9F3</color>
+  <color name="workCompleteBackgrounColor">#F15E6D</color>
+
+
+</resources>
