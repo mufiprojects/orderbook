@@ -304,7 +304,7 @@ public class MainActivity extends AppCompatActivity {
                 if (position==0)
                 {
                     try {
-                        Objects.requireNonNull(tabLayout.getTabAt(1)).select();
+                        Objects.requireNonNull(tabLayout.getTabAt(0)).select();
                     }
                     catch (NullPointerException n)
                     {
@@ -328,7 +328,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void setViewPagerWithTabPosition() {
         if (tabLayout.getSelectedTabPosition()==0) {
-            viewPager.setCurrentItem(1);
+            viewPager.setCurrentItem(0);
         }
         else
         {

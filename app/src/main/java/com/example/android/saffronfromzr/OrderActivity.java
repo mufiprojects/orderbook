@@ -66,6 +66,7 @@ public class OrderActivity extends AppCompatActivity implements DatePickerDialog
     TextView pickDelDateText;
     TextView addOrderTextView;
     TextInputEditText customerNameEditText;
+    TextInputEditText orderAmountEditText;
     NachoTextView itemNameEditText;
 
     CardView orderDateCard, delDateCard;
@@ -140,6 +141,7 @@ public class OrderActivity extends AppCompatActivity implements DatePickerDialog
         delDateCard = findViewById(R.id.delDateCard);
 
         customerNameEditText = (TextInputEditText) findViewById(R.id.customerName);
+        orderAmountEditText=findViewById(R.id.orderAmountText);
         itemNameEditText = (NachoTextView) findViewById(R.id.itemNameEditText);
 
         isHandWork = findViewById(R.id.isHandWork);
@@ -179,6 +181,9 @@ public class OrderActivity extends AppCompatActivity implements DatePickerDialog
             public void onClick(View view) {
                 DialogFragment newBottomDatePicker=createNewBottomDatePicker();
                 newBottomDatePicker.show(getSupportFragmentManager(),"datePicker");
+
+
+
 //                openBottonCalender(false);
             }
         });
@@ -306,7 +311,7 @@ public class OrderActivity extends AppCompatActivity implements DatePickerDialog
 
         order order = new order(currentUser + deliveryDateString, currentUser,
                 orderDateString, deliveryDateString, customerName, isHandWork, items,
-                false);
+                false,getOrderAmount(),false);
         DatabaseReference databaseOrders = FirebaseDatabase.getInstance().getReference("orders");
 
         databaseOrders.child(getOrderNo()).setValue(order);
@@ -585,6 +590,9 @@ public class OrderActivity extends AppCompatActivity implements DatePickerDialog
         dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
         String dateToString = dateFormat.format(selectedDate);
         return dateToString;
+    }
+    private String getOrderAmount(){
+        return orderAmountEditText.getText().toString();
     }
 
     public void setPickDelDateTextViewVisibility(int Visibility) {

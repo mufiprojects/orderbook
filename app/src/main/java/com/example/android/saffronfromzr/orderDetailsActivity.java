@@ -56,6 +56,7 @@ public class orderDetailsActivity extends AppCompatActivity {
 
 
     MaterialButton workCompleteButton; // bind this local
+    MaterialButton deliveryBtn;
     MaterialButton backBtn;
     MaterialButton editBtn;
 
@@ -175,6 +176,14 @@ public class orderDetailsActivity extends AppCompatActivity {
                 common.incrementNoOfOrder("completedOrder");
 
                 workCompleteButton.setVisibility(View.INVISIBLE);
+                deliveryBtn=findViewById(R.id.deliveredBtn);
+                deliveryBtn.setVisibility(View.VISIBLE);
+                deliveryBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        databaseOrders.child(orderNo).child("isDelivery").setValue(true);
+                    }
+                });
                 showWorkCompleteTab();
             }
         });
@@ -255,14 +264,20 @@ public class orderDetailsActivity extends AppCompatActivity {
 
                         if (workComplete) {
                             showWorkCompleteTab();
+                            deliveryBtn=findViewById(R.id.deliveredBtn);
+                            deliveryBtn.setVisibility(View.VISIBLE);
+                            deliveryBtn.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    databaseOrders.child(orderNo).child("isDelivery").setValue(true);
+                                }
+                            });
 
 
 
                         } else {
 
                             showWorkCompleteButton();
-
-
 
 
                         }
@@ -350,10 +365,10 @@ public class orderDetailsActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (getCode().equals("04885")){
+
                     openOrderActivity();
                     setEditModeOn();
-                }
+
 
             }
         });
